@@ -1,13 +1,11 @@
 #include <iostream>
 #include <array>
 
-#include <Helper.h>
-
 int main() {
     std::cout << "Hello, world!\n";
     std::array<int, 100> v{};
     int nr;
-    std::cout << "Introduceți nr: ";
+    std::cout << "Introduceti nr: ";
     /////////////////////////////////////////////////////////////////////////
     /// Observație: dacă aveți nevoie să citiți date de intrare de la tastatură,
     /// dați exemple de date de intrare folosind fișierul tastatura.txt
@@ -35,7 +33,7 @@ int main() {
         std::cin >> v[i];
     }
     std::cout << "\n\n";
-    std::cout << "Am citit de la tastatură " << nr << " elemente:\n";
+    std::cout << "Am citit de la tastatura " << nr << " elemente:\n";
     for(int i = 0; i < nr; ++i) {
         std::cout << "- " << v[i] << "\n";
     }
@@ -47,11 +45,6 @@ int main() {
     /// for(int i = 0; i < nr2; ++i)
     ///     fis >> v2[i];
     ///
-    ///////////////////////////////////////////////////////////////////////////
-    ///                Exemplu de utilizare cod generat                     ///
-    ///////////////////////////////////////////////////////////////////////////
-    Helper helper;
-    helper.help();
     ///////////////////////////////////////////////////////////////////////////
     return 0;
 }
