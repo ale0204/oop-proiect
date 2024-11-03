@@ -21,7 +21,7 @@ std::vector<TestTableEntry> TestTable::Select()
 
     while ((row = mysql_fetch_row(res))) 
     {
-        entries.push_back(TestTableEntry(atoi(row[0]), row[1], atoi(row[2])));
+        entries.push_back(TestTableEntry(row[1], atoi(row[2]), atoi(row[0])));
     }
     return entries;
 }

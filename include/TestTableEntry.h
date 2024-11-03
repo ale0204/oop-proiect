@@ -8,10 +8,10 @@ private:
     std::string name;
     int age;
 public:
-    TestTableEntry(unsigned long long id = 0, std::string name = "", int age = -1);
     TestTableEntry(std::string name = "", int age = -1, unsigned long long id = 0);
     void Print(std::ostream& os) const override;
     friend std::ostream& operator<<(std::ostream& os, const TestTableEntry& entry);
+    friend std::istream& operator>>(std::istream& is, TestTableEntry& entry);
     friend class TestTable;
 };
 

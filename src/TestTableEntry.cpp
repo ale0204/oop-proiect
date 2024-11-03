@@ -2,8 +2,6 @@
 #include "../include/TestTable.h"
 #include <vector>
 
-TestTableEntry::TestTableEntry(unsigned long long id, std::string name, int age) 
-    : Entity(id), name {name}, age {age} { }
 TestTableEntry::TestTableEntry(std::string name, int age, unsigned long long id) 
     : Entity(id), name {name}, age {age} { }
 
@@ -19,4 +17,14 @@ std::ostream& operator<<(std::ostream& os, const TestTableEntry& entry)
 {
     entry.Print(os);
     return os;
+}
+
+std::istream& operator>>(std::istream& is, TestTableEntry& entry)
+{
+    std::cout << "Add a new entry to the table\n";
+    std::cout << "Name: ";
+    is >> entry.name;
+    std::cout << "Age: ";
+    is >> entry.age;
+    return is;
 }
