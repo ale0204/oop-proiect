@@ -222,7 +222,7 @@ jobs:
           mkdir build/bin
           cp "SDL2\bin\SDL2.dll" "build\bin"
           cp "MySQL\lib\libmysql.dll" "build\bin"
-          cp "MySQL\lib\libssl-3-x64.dll "build\bin"
+          cp "MySQL\lib\libssl-3-x64.dll" "build\bin"
           cp "MySQL\lib\llibcrypto-3-x64.dll" "build\bin"
       - name: Create release
         uses: ./.github/actions/create-release
