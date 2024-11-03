@@ -1,5 +1,6 @@
 #include "../include/TestTable.h"
 #include <algorithm>
+
 int main() 
 {   
     TestTable& testTable = TestTable::GetInstance();
@@ -17,7 +18,8 @@ int main()
     {
         std::cout << "Inserted with id " << entry.GetID() << '\n';
     }
-
+    
+    entries = testTable.Select();
     std::cout << "Updated table:\n";
     std::for_each(entries.begin(), entries.end(), 
         [](const TestTableEntry& entry) {
