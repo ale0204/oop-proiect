@@ -36,6 +36,22 @@ set(MySQL_LIB_DIR "${CMAKE_SOURCE_DIR}/MySQL/lib")
 # Include MySQL headers
 target_include_directories(${PROJECT_NAME} PRIVATE ${MySQL_INCLUDE_DIR})
 
+# List the DLLs you need to copy to the output directory
+set(DLL_FILES
+    "${CMAKE_SOURCE_DIR}/SDL2/bin/SDL2.dll"
+    "${CMAKE_SOURCE_DIR}/MySQL/lib/libmysql.dll"
+    "${CMAKE_SOURCE_DIR}/MySQL/lib/libssl-3-x64.dll"
+    "${CMAKE_SOURCE_DIR}/MySQL/lib/libcrypto-3-x64.dll"
+)
+
+# Copy each DLL to the output directory after the executable is built
+foreach(DLL ${DLL_FILES})
+    add_custom_command(TARGET my_executable POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            ${DLL}
+            $<TARGET_FILE_DIR:my_executable>)
+endforeach()
+
 # Link against libmysql.dll instead of mysqlclient.lib
 target_link_libraries(${PROJECT_NAME} PRIVATE "${MySQL_LIB_DIR}/libmysql.dll")
 # SDL2 setup for Windows
