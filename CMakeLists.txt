@@ -46,10 +46,10 @@ set(DLL_FILES
 
 # Copy each DLL to the output directory after the executable is built
 foreach(DLL ${DLL_FILES})
-    add_custom_command(TARGET my_executable POST_BUILD
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
             ${DLL}
-            $<TARGET_FILE_DIR:my_executable>)
+            $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 endforeach()
 
 # Link against libmysql.dll instead of mysqlclient.lib
