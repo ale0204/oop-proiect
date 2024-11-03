@@ -220,8 +220,10 @@ jobs:
       - name: Copy DLL files
         run: |
           mkdir build/bin
-          cp "SDL2\bin\*.dll" "build\bin"  # Copy DLLs from `libs` folder
-          cp "MySQL\lib\*.dll" "build\bin"  # Copy DLLs from `libs` folder
+          cp "SDL2\bin\SDL2.dll" "build\bin"
+          cp "MySQL\lib\libmysql.dll" "build\bin"
+          cp "MySQL\lib\libssl-3-x64.dll "build\bin"
+          cp "MySQL\lib\llibcrypto-3-x64.dll" "build\bin"
       - name: Create release
         uses: ./.github/actions/create-release
         if: startsWith(github.ref, 'refs/tags/')
