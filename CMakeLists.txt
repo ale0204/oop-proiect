@@ -36,26 +36,9 @@ set(MySQL_LIB_DIR "${CMAKE_SOURCE_DIR}/MySQL/lib")
 # Include MySQL headers
 target_include_directories(${PROJECT_NAME} PRIVATE ${MySQL_INCLUDE_DIR})
 
-# List the DLLs to copy
-set(DLL_FILES
-    "${CMAKE_SOURCE_DIR}/SDL2/bin/SDL2.dll"
-    "${CMAKE_SOURCE_DIR}/MySQL/lib/libmysql.dll"
-    "${CMAKE_SOURCE_DIR}/MySQL/lib/libssl-3-x64.dll"
-    "${CMAKE_SOURCE_DIR}/MySQL/lib/libcrypto-3-x64.dll"
-)
-
-# Copy each DLL to the output directory after the executable is built
-foreach(DLL ${DLL_FILES})
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E echo "Copying ${DLL} to $<TARGET_FILE_DIR:${PROJECT_NAME}>"
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "${DLL}"
-            "$<TARGET_FILE_DIR:${PROJECT_NAME}>")
-endforeach()
-
 # Link against libmysql.dll instead of mysqlclient.lib
-# target_link_libraries(${PROJECT_NAME} PRIVATE "${MySQL_LIB_DIR}/libmysql.dll")
-target_link_libraries(${PROJECT_NAME} PRIVATE "${MySQL_LIB_DIR}/libmysql.lib")
+target_link_libraries(${PROJECT_NAME} PRIVATE "${MySQL_LIB_DIR}/libmysql.dll")
+
 # SDL2 setup for Windows
 if (WIN32)
     # Set SDL2 include and library directories manually
@@ -69,6 +52,22 @@ if (WIN32)
     target_link_directories(${PROJECT_NAME} PRIVATE ${SDL2_LIB_DIR})
     target_link_libraries(${PROJECT_NAME} PRIVATE "${SDL2_LIB_DIR}/libSDL2.a" "${SDL2_LIB_DIR}/libSDL2main.a"
     user32 gdi32 winmm imm32 setupapi version)
+    # List the DLLs to copy
+    set(DLL_FILES
+    "${CMAKE_SOURCE_DIR}/SDL2/bin/SDL2.dll"
+    "${CMAKE_SOURCE_DIR}/MySQL/lib/libmysql.dll"
+    "${CMAKE_SOURCE_DIR}/MySQL/lib/libssl-3-x64.dll"
+    "${CMAKE_SOURCE_DIR}/MySQL/lib/libcrypto-3-x64.dll"
+    )
+
+    # Copy each DLL to the output directory after the executable is built
+    foreach(DLL ${DLL_FILES})
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E echo "Copying ${DLL} to $<TARGET_FILE_DIR:${PROJECT_NAME}>"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${DLL}"
+            "$<TARGET_FILE_DIR:${PROJECT_NAME}>")
+    endforeach()
 else()
     # Find SDL2 automatically on Linux/macOS
     find_package(SDL2 REQUIRED)
