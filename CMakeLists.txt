@@ -7,11 +7,35 @@ project(oop)
 # set(CMAKE_PROJECT_VERSION_MINOR 0)
 # set(CMAKE_PROJECT_VERSION_PATCH 1)
 
-set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 include(cmake/Options.cmake)
+
+###############################################################################
+
+# NOTE: update executable name in .github/workflows/cmake.yml:25 when changing name here
+add_executable(${PROJECT_NAME} src/main.cpp)
+
+include(cmake/CompilerFlags.cmake)
+
+# SDL2 setup for Windows
+if (WIN32)
+    # Set SDL2 include and library directories manually
+    set(SDL2_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/SDL2/include")
+    set(SDL2_LIB_DIR "${CMAKE_SOURCE_DIR}/SDL2/lib")
+        
+    # Include SDL2 headers and link libraries using explicit paths
+    target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIR})
+    target_link_directories(${PROJECT_NAME} PRIVATE ${SDL2_LIB_DIR})
+    target_link_libraries(${PROJECT_NAME} PRIVATE "${SDL2_LIB_DIR}/libSDL2.a" "${SDL2_LIB_DIR}/libSDL2main.a"
+    user32 gdi32 winmm imm32 setupapi version)
+else()
+    # Find SDL2 automatically on Linux/macOS
+    find_package(SDL2 REQUIRED)
+    target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2)
+endif()
 
 ###############################################################################
 
@@ -41,17 +65,10 @@ include(cmake/Options.cmake)
 
 ###############################################################################
 
-# NOTE: update executable name in .github/workflows/cmake.yml:25 when changing name here
-add_executable(${PROJECT_NAME}
-    src/main.cpp
-)
-
-include(cmake/CompilerFlags.cmake)
-
-###############################################################################
-
 # use SYSTEM so cppcheck and clang-tidy do not report warnings from these directories
 target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE include)
+
+# Additional target include directories and libraries
 # target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ext/<SomeHppLib>/include)
 # target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ${<SomeLib>_SOURCE_DIR}/include)
 # target_link_directories(${PROJECT_NAME} PRIVATE ${<SomeLib>_BINARY_DIR}/lib)

@@ -1,0 +1,7 @@
+C:/Users/Alexandra/Desktop/facultate/an2/poo/oop-proiect/build/CMakeFiles/oop.dir
+C:/Users/Alexandra/Desktop/facultate/an2/poo/oop-proiect/build/CMakeFiles/edit_cache.dir
+C:/Users/Alexandra/Desktop/facultate/an2/poo/oop-proiect/build/CMakeFiles/rebuild_cache.dir
+C:/Users/Alexandra/Desktop/facultate/an2/poo/oop-proiect/build/CMakeFiles/list_install_components.dir
+C:/Users/Alexandra/Desktop/facultate/an2/poo/oop-proiect/build/CMakeFiles/install.dir
+C:/Users/Alexandra/Desktop/facultate/an2/poo/oop-proiect/build/CMakeFiles/install/local.dir
+C:/Users/Alexandra/Desktop/facultate/an2/poo/oop-proiect/build/CMakeFiles/install/strip.dir
