@@ -1,9 +1,11 @@
 #define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
 #include <iostream>
+#include "../include/test.h"
 
 int main() 
 {
+    TestFunction();
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
         return 1;
