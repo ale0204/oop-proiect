@@ -11,21 +11,41 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-include(cmake/Options.cmake)
 
 ###############################################################################
 
 # NOTE: update executable name in .github/workflows/cmake.yml:25 when changing name here
-add_executable(${PROJECT_NAME} src/main.cpp src/test.cpp)
+add_executable(${PROJECT_NAME} 
+src/main.cpp 
+src/AbstractTable.cpp
+src/MYSQLConnection.cpp
+src/TestTable.cpp
+src/TestTableEntry.cpp)
 
+include(cmake/Options.cmake)
 include(cmake/CompilerFlags.cmake)
+include(cmake/CopyHelper.cmake)
 
+# use SYSTEM so cppcheck and clang-tidy do not report warnings from these directories
+target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE include)
+
+# MySQL setup
+set(MySQL_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/MySQL/include")
+set(MySQL_LIB_DIR "${CMAKE_SOURCE_DIR}/MySQL/lib")
+
+# Include MySQL headers
+target_include_directories(${PROJECT_NAME} PRIVATE ${MySQL_INCLUDE_DIR})
+
+# Link against libmysql.dll instead of mysqlclient.lib
+target_link_libraries(${PROJECT_NAME} PRIVATE "${MySQL_LIB_DIR}/libmysql.dll")
 # SDL2 setup for Windows
 if (WIN32)
     # Set SDL2 include and library directories manually
     set(SDL2_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/SDL2/include")
     set(SDL2_LIB_DIR "${CMAKE_SOURCE_DIR}/SDL2/lib")
-        
+    # MySQL setup
+    set(MySQL_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/MySQL/include")
+    set(MySQL_LIB_DIR "${CMAKE_SOURCE_DIR}/MySQL/lib")
     # Include SDL2 headers and link libraries using explicit paths
     target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIR})
     target_link_directories(${PROJECT_NAME} PRIVATE ${SDL2_LIB_DIR})
@@ -65,8 +85,7 @@ endif()
 
 ###############################################################################
 
-# use SYSTEM so cppcheck and clang-tidy do not report warnings from these directories
-target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE include)
+
 
 # Additional target include directories and libraries
 # target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ext/<SomeHppLib>/include)
@@ -83,7 +102,6 @@ if(APPLE)
     install(FILES launcher.command DESTINATION ${DESTINATION_DIR})
 endif()
 
-include(cmake/CopyHelper.cmake)
 copy_files(FILES tastatura.txt)
 # copy_files(FILES tastatura.txt config.json DIRECTORY images sounds)
 # copy_files(DIRECTORY images sounds)
