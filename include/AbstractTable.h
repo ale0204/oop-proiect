@@ -22,8 +22,8 @@ protected:
     MYSQL_RES* ExecuteSelectQuery(const std::string& query);
     std::string InsertQuery();
     bool ExecuteQuery(std::string query);
-    const std::vector<std::string>& GetColumnNames() const;
 public:
+    const std::vector<std::string>& GetColumnNames() const;
     // virtual std::vector<Entity*> Select() = 0;
 };
 
