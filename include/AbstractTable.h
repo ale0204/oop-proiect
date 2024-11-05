@@ -19,11 +19,11 @@ private:
 protected:
     std::string StringToDb(std::string s);
     AbstractTable(std::string table_name = "");
-public:
-    std::string InsertQuery();
     MYSQL_RES* ExecuteSelectQuery(const std::string& query);
+    std::string InsertQuery();
     bool ExecuteQuery(std::string query);
     const std::vector<std::string>& GetColumnNames() const;
+public:
     // virtual std::vector<Entity*> Select() = 0;
 };
 
