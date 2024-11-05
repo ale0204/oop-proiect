@@ -20,7 +20,8 @@ src/main.cpp
 src/AbstractTable.cpp
 src/MYSQLConnection.cpp
 src/TestTable.cpp
-src/TestTableEntry.cpp)
+src/TestTableEntry.cpp
+src/Entity.cpp)
 
 include(cmake/Options.cmake)
 include(cmake/CompilerFlags.cmake)

@@ -21,7 +21,7 @@ protected:
 public:
     AbstractTable(std::string table_name = "");
     std::string InsertQuery();
-    MYSQL_RES* ExecuteSelectQuery(std::string query);
+    MYSQL_RES* ExecuteSelectQuery(const std::string& query);
     bool ExecuteQuery(std::string query);
     const std::vector<std::string>& GetColumnNames() const;
     // virtual std::vector<Entity*> Select() = 0;

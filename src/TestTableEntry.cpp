@@ -13,12 +13,6 @@ void TestTableEntry::Print(std::ostream& os) const
     os << column_names[2] << ": " << age << '\n';
 }
 
-std::ostream& operator<<(std::ostream& os, const TestTableEntry& entry)
-{
-    entry.Print(os);
-    return os;
-}
-
 std::istream& operator>>(std::istream& is, TestTableEntry& entry)
 {
     std::cout << "Add a new entry to the table\n";

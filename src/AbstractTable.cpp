@@ -49,7 +49,7 @@ std::string AbstractTable::InsertQuery()
     return query;
 }
 
-MYSQL_RES* AbstractTable::ExecuteSelectQuery(std::string query)
+MYSQL_RES* AbstractTable::ExecuteSelectQuery(const std::string& query)
 {
     MYSQL_RES *result = NULL;
     if (mysql_query(conn, query.c_str()) != 0) {
