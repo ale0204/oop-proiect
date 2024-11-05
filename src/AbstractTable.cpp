@@ -12,11 +12,11 @@ std::vector<std::string> AbstractTable::FetchColumnNames(int& numFields)
     if(result == NULL)
         return cols;
     num_columns = 0;
-    printf("num_columns = %d\n", num_columns);
     while ((row = mysql_fetch_row(result))) {
         cols.push_back(row[0]);
         num_columns++;
     }
+    printf("num_columns = %d\n", num_columns);
     numFields = num_columns;
     mysql_free_result(result);
     return cols;
