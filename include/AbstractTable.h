@@ -18,8 +18,8 @@ private:
     std::vector<std::string> FetchColumnNames(int& numFields);
 protected:
     std::string StringToDb(std::string s);
-public:
     AbstractTable(std::string table_name = "");
+public:
     std::string InsertQuery();
     MYSQL_RES* ExecuteSelectQuery(const std::string& query);
     bool ExecuteQuery(std::string query);

@@ -3,13 +3,9 @@
 MySQLConnection* MySQLConnection::instance = nullptr;
 
 MySQLConnection::MySQLConnection(std::string host, std::string user,
-                    std::string password, std::string db_name, unsigned int port)
+                    std::string password, std::string db_name, unsigned short port)
+    : host {host}, user {user}, password {password}, db_name {db_name}, port {port}
 {
-    this->host = host;
-    this->user = user;
-    this->password = password;
-    this->db_name = db_name;
-    this->port = port;
     conn = mysql_init(NULL);
     if (conn == NULL)
     {

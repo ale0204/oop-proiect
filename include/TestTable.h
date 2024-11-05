@@ -7,6 +7,7 @@ class TestTable : public AbstractTable {
 private:
     static TestTable *instance;
     TestTable(std::string table_name = "test_table") : AbstractTable(table_name) {}
+    std::vector<TestTableEntry> entries;
 public:
     static TestTable& GetInstance();
     std::vector<TestTableEntry> Select();

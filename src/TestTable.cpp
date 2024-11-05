@@ -12,7 +12,6 @@ TestTable& TestTable::GetInstance()
 
 std::vector<TestTableEntry> TestTable::Select()
 {
-    std::vector<TestTableEntry> entries;
     std::string query;
     query = "SELECT * FROM " + table_name  + ";";
     res = ExecuteSelectQuery(query);
@@ -23,6 +22,7 @@ std::vector<TestTableEntry> TestTable::Select()
     {
         entries.push_back(TestTableEntry(row[1], atoi(row[2]), atoll(row[0])));
     }
+    mysql_free_result(res);
     return entries;
 }
 

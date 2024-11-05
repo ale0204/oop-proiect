@@ -5,11 +5,10 @@
 #include <cstdint>
 class Entity {
 protected:
-    unsigned long long id;
-    // uint64_t
+    uint64_t id;
 public:
-    Entity(unsigned long long id) : id {id} { }
-    unsigned long long GetID() { return id; }
+    Entity(uint64_t id) : id {id} { }
+    uint64_t GetID() { return id; }
     virtual void Print(std::ostream& os) const = 0;
     friend std::ostream& operator<<(std::ostream& os, const Entity& entry);
 };

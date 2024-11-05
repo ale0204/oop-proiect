@@ -8,7 +8,8 @@ private:
     std::string name;
     int age;
 public:
-    TestTableEntry(std::string name = "", int age = -1, unsigned long long id = 0);
+    TestTableEntry(std::string name = "", int age = -1, uint64_t id = 0);
+    TestTableEntry(const TestTableEntry& testTableEntry);
     void Print(std::ostream& os) const override;
     friend std::istream& operator>>(std::istream& is, TestTableEntry& entry);
     friend class TestTable;
