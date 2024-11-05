@@ -63,4 +63,7 @@ Libraria SDL2 pentru interfata grafica a jocului
 - [ ] tag de `git`: de exemplu `v0.3` sau `v1.0`
 
 ## Resurse
-- adăugați trimiteri către resursele externe care v-au ajutat sau pe care le-ați folosit
+- Resurse:
+	- https://dev.mysql.com/doc/c-api/8.4/en/c-api-function-reference.html (MYSQL API C/C++)
+	- https://documentation.help/SDL/index.html (SDL2 API C/C++)
+	- https://en.cppreference.com/w/ (documentatie clase + functii + exemple utilizare - din libraria STL din C++)
