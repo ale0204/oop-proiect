@@ -17,6 +17,7 @@ void ShowTestWindow()
         SDL_Quit();
         exit(EXIT_FAILURE);
     }
+
     SDL_Delay(3000);
 
     SDL_DestroyWindow(window);
@@ -25,29 +26,29 @@ void ShowTestWindow()
 
 int main() 
 {   
-    // TestTable& testTable = TestTable::GetInstance();
-    // std::vector<TestTableEntry> entries = testTable.Select();
+    TestTable& testTable = TestTable::GetInstance();
+    std::vector<TestTableEntry> entries = testTable.Select();
 
-    // std::for_each(entries.begin(), entries.end(), 
-    //     [](const TestTableEntry& entry) {
-    //         std::cout << entry << std::endl;
-    //     }
-    // );
+    std::for_each(entries.begin(), entries.end(), 
+        [](const TestTableEntry& entry) {
+            std::cout << entry << std::endl;
+        }
+    );
     
-    // TestTableEntry entry;
-    // std::cin >> entry;
-    // if(testTable.Insert(entry))
-    // {
-    //     std::cout << "Inserted with id " << entry.GetID() << '\n';
-    // }
+    TestTableEntry entry;
+    std::cin >> entry;
+    if(testTable.Insert(entry))
+    {
+        std::cout << "Inserted with id " << entry.GetID() << '\n';
+    }
     
-    // entries = testTable.Select();
-    // std::cout << "Updated table:\n";
-    // std::for_each(entries.begin(), entries.end(), 
-    //     [](const TestTableEntry& entry) {
-    //         std::cout << entry << std::endl;
-    //     }
-    // );
+    entries = testTable.Select();
+    std::cout << "Updated table:\n";
+    std::for_each(entries.begin(), entries.end(), 
+        [](const TestTableEntry& entry) {
+            std::cout << entry << std::endl;
+        }
+    );
 
     ShowTestWindow();
 
