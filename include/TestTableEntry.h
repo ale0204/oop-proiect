@@ -10,6 +10,7 @@ private:
 public:
     TestTableEntry(std::string name = "", int age = -1, uint64_t id = 0);
     TestTableEntry(const TestTableEntry& testTableEntry);
+    TestTableEntry& operator=(const TestTableEntry& testTableEntry);
     void Print(std::ostream& os) const override;
     friend std::istream& operator>>(std::istream& is, TestTableEntry& entry);
     friend class TestTable;

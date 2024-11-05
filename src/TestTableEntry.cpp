@@ -8,6 +8,17 @@ TestTableEntry::TestTableEntry(std::string name, int age, uint64_t id)
 TestTableEntry::TestTableEntry(const TestTableEntry& other)
     : Entity(other.id), name {other.name}, age {other.age} { }
 
+TestTableEntry& TestTableEntry::operator=(const TestTableEntry& other)
+{
+    if(this != &other)
+    {
+        this->id = other.id;
+        this->name = other.name;
+        this->age = other.age;
+    }
+    return *this;
+}
+
 void TestTableEntry::Print(std::ostream& os) const
 {
     const std::vector<std::string>& column_names =  TestTable::GetInstance().GetColumnNames();
