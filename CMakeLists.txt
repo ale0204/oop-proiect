@@ -7,7 +7,7 @@ set(CMAKE_PROJECT_VERSION_MAJOR 0)
 set(CMAKE_PROJECT_VERSION_MINOR 1)
 # set(CMAKE_PROJECT_VERSION_PATCH 1)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -47,20 +47,23 @@ if (WIN32)
     # Set SDL2 include and library directories manually
     set(SDL2_INCLUDE_DIR "${MY_LIBRARIES_DIR}/SDL2/include")
     set(SDL2_LIB_DIR "${MY_LIBRARIES_DIR}/SDL2/lib")
-    set(SDL2_IMAGE_INCLUDE_DIR "${MY_LIBRARIES_DIR}/SDL2_Image/include")
     set(SDL2_IMAGE_LIB_DIR "${MY_LIBRARIES_DIR}/SDL2_Image/lib")
+    set(SDL2_TTF_LIB_DIR "${MY_LIBRARIES_DIR}/SDL2_ttf/lib")
     # MySQL setup
     set(MySQL_INCLUDE_DIR "{MY_LIBRARIES_DIR}/MySQL/include")
     set(MySQL_LIB_DIR "{MY_LIBRARIES_DIR}/MySQL/lib")
     # Include SDL2 headers and link libraries using explicit paths
-    target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIR} ${MySQL_INCLUDE_DIR} ${SDL2_IMAGE_INCLUDE_DIR})
-    target_link_directories(${PROJECT_NAME} PRIVATE ${SDL2_LIB_DIR} ${MySQL_LIB_DIR}, ${SDL2_IMAGE_LIB_DIR})
+    target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIR} ${MySQL_INCLUDE_DIR})
+    target_link_directories(${PROJECT_NAME} PRIVATE ${SDL2_LIB_DIR} ${MySQL_LIB_DIR}, ${SDL2_IMAGE_LIB_DIR}
+        ${SDL2_TTF_LIB_DIR})
     target_link_libraries(${PROJECT_NAME} PRIVATE "${SDL2_LIB_DIR}/libSDL2.a" "${SDL2_LIB_DIR}/libSDL2main.a" 
-    "${SDL2_IMAGE_LIB_DIR}/libSDL2_image.a" user32 gdi32 winmm imm32 setupapi version)
+        "${SDL2_IMAGE_LIB_DIR}/libSDL2_image.a" "${SDL2_TTF_LIB_DIR}/libSDL2_ttf.a"
+        user32 gdi32 winmm imm32 rpcrt4 setupapi version)
     # List the DLLs to copy
     set(DLL_FILES
     "${MY_LIBRARIES_DIR}/SDL2/bin/SDL2.dll"
     "${MY_LIBRARIES_DIR}/SDL2_Image/bin/SDL2_Image.dll"
+    "${MY_LIBRARIES_DIR}/SDL2_ttf/bin/SDL2_ttf.dll"
     "${MY_LIBRARIES_DIR}/MySQL/lib/libmysql.dll"
     "${MY_LIBRARIES_DIR}/MySQL/lib/libssl-3-x64.dll"
     "${MY_LIBRARIES_DIR}/MySQL/lib/libcrypto-3-x64.dll"
@@ -127,5 +130,6 @@ if(APPLE)
 endif()
 
 copy_files(FILES tastatura.txt)
+copy_files(DIRECTORY assets)
 # copy_files(FILES tastatura.txt config.json DIRECTORY images sounds)
 # copy_files(DIRECTORY images sounds)
