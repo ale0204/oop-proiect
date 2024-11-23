@@ -30,9 +30,11 @@ include(cmake/CopyHelper.cmake)
 # use SYSTEM so cppcheck and clang-tidy do not report warnings from these directories
 target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE include)
 
+
+set(MY_LIBRARIES_DIR "${CMAKE_SOURCE_DIR}/libraries")
 # MySQL setup
-set(MySQL_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/MySQL/include")
-set(MySQL_LIB_DIR "${CMAKE_SOURCE_DIR}/MySQL/lib")
+set(MySQL_INCLUDE_DIR "${MY_LIBRARIES_DIR}/MySQL/include")
+set(MySQL_LIB_DIR "${MY_LIBRARIES_DIR}/MySQL/lib")
 
 # Include MySQL headers
 target_include_directories(${PROJECT_NAME} PRIVATE ${MySQL_INCLUDE_DIR})
@@ -43,22 +45,26 @@ target_link_libraries(${PROJECT_NAME} PRIVATE "${MySQL_LIB_DIR}/libmysql.dll")
 # SDL2 setup for Windows
 if (WIN32)
     # Set SDL2 include and library directories manually
-    set(SDL2_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/SDL2/include")
-    set(SDL2_LIB_DIR "${CMAKE_SOURCE_DIR}/SDL2/lib")
+    set(SDL2_INCLUDE_DIR "${MY_LIBRARIES_DIR}/SDL2/include")
+    set(SDL2_LIB_DIR "${MY_LIBRARIES_DIR}/SDL2/lib")
+    set(SDL2_IMAGE_INCLUDE_DIR "${MY_LIBRARIES_DIR}/SDL2_Image/include")
+    set(SDL2_IMAGE_LIB_DIR "${MY_LIBRARIES_DIR}/SDL2_Image/lib")
     # MySQL setup
-    set(MySQL_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/MySQL/include")
-    set(MySQL_LIB_DIR "${CMAKE_SOURCE_DIR}/MySQL/lib")
+    set(MySQL_INCLUDE_DIR "{MY_LIBRARIES_DIR}/MySQL/include")
+    set(MySQL_LIB_DIR "{MY_LIBRARIES_DIR}/MySQL/lib")
     # Include SDL2 headers and link libraries using explicit paths
-    target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIR})
-    target_link_directories(${PROJECT_NAME} PRIVATE ${SDL2_LIB_DIR})
-    target_link_libraries(${PROJECT_NAME} PRIVATE "${SDL2_LIB_DIR}/libSDL2.a" "${SDL2_LIB_DIR}/libSDL2main.a"
-    user32 gdi32 winmm imm32 setupapi version)
+    target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIR} ${MySQL_INCLUDE_DIR} ${SDL2_IMAGE_INCLUDE_DIR})
+    target_link_directories(${PROJECT_NAME} PRIVATE ${SDL2_LIB_DIR} ${MySQL_LIB_DIR}, ${SDL2_IMAGE_LIB_DIR})
+    target_link_libraries(${PROJECT_NAME} PRIVATE "${SDL2_LIB_DIR}/libSDL2.a" "${SDL2_LIB_DIR}/libSDL2main.a" 
+    "${SDL2_IMAGE_LIB_DIR}/libSDL2_image.a" user32 gdi32 winmm imm32 setupapi version)
     # List the DLLs to copy
     set(DLL_FILES
-    "${CMAKE_SOURCE_DIR}/SDL2/bin/SDL2.dll"
-    "${CMAKE_SOURCE_DIR}/MySQL/lib/libmysql.dll"
-    "${CMAKE_SOURCE_DIR}/MySQL/lib/libssl-3-x64.dll"
-    "${CMAKE_SOURCE_DIR}/MySQL/lib/libcrypto-3-x64.dll"
+    "${MY_LIBRARIES_DIR}/SDL2/bin/SDL2.dll"
+    "${MY_LIBRARIES_DIR}/SDL2_Image/bin/SDL2_Image.dll"
+    "${MY_LIBRARIES_DIR}/MySQL/lib/libmysql.dll"
+    "${MY_LIBRARIES_DIR}/MySQL/lib/libssl-3-x64.dll"
+    "${MY_LIBRARIES_DIR}/MySQL/lib/libcrypto-3-x64.dll"
+    
     )
 
     # Copy each DLL to the output directory after the executable is built

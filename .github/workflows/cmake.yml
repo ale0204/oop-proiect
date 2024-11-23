@@ -157,10 +157,11 @@ jobs:
         if: runner.os == 'Windows'
         run: |
           mkdir -p artifacts/${{ env.BIN_DIR }}
-          cp ./SDL2/bin/SDL2.dll artifacts/${{ env.BIN_DIR }}
-          cp ./MySQL/lib/libmysql.dll artifacts/${{ env.BIN_DIR }}
-          cp ./MySQL/lib/libssl-3-x64.dll artifacts/${{ env.BIN_DIR }}
-          cp ./MySQL/lib/libcrypto-3-x64.dll artifacts/${{ env.BIN_DIR }}
+          cp ./libraries/SDL2/bin/SDL2.dll artifacts/${{ env.BIN_DIR }}
+          cp ./libraries/SDL2_image/bin/SDL2_image.dll artifacts/${{ env.BIN_DIR }}
+          cp ./libraries/MySQL/lib/libmysql.dll artifacts/${{ env.BIN_DIR }}
+          cp ./libraries/MySQL/lib/libssl-3-x64.dll artifacts/${{ env.BIN_DIR }}
+          cp ./libraries/MySQL/lib/libcrypto-3-x64.dll artifacts/${{ env.BIN_DIR }}
 
       - name: Move artifacts to ZIP directory
         run: |
