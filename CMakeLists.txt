@@ -16,12 +16,19 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 # NOTE: update executable name in .github/workflows/cmake.yml:25 when changing name here
 add_executable(${PROJECT_NAME} 
-src/main.cpp 
-src/AbstractTable.cpp
-src/MYSQLConnection.cpp
-src/TestTable.cpp
-src/TestTableEntry.cpp
-src/Entity.cpp)
+    src/main.cpp 
+    src/AbstractTable.cpp
+    src/MYSQLConnection.cpp
+    src/TestTable.cpp
+    src/TestTableEntry.cpp
+    src/Entity.cpp
+    src/CandyCrush/Candy.cpp
+    src/CandyCrush/CandyCrush.cpp
+    src/CandyCrush/Game.cpp
+    src/CandyCrush/GameObject.cpp
+    src/CandyCrush/GUIManager.cpp
+    src/CandyCrush/TextureManager.cpp
+)
 
 include(cmake/Options.cmake)
 include(cmake/CompilerFlags.cmake)
