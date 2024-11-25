@@ -1,15 +1,34 @@
 #include "../../include/CandyCrush/CandyCrush.h"
 #include "../../include/CandyCrush/TextureManager.h"
+#include "../../include/CandyCrush/Constants.h"
 #include <SDL2/SDL.h>
 
-const int NUM_CANDIES = 6;
-
 CandyCrush::CandyCrush(const std::string &windowTitle, int x, int y, int w, int h, int fps)
-    : Game(windowTitle, x, y, w, h, fps)
-{
-    CandyType candyType = CandyType::NORMAL_CANDY;
-    for(int i = 0; i < NUM_CANDIES; i++)
-        candies.push_back(TextureManager::GetInstance().GetCandy(candyType, static_cast<CandyColor>(i)));
+    : Game(windowTitle, x, y, w, h, fps), BOARD_SIZE_X{::BOARD_SIZE_X}, BOARD_SIZE_Y{::BOARD_SIZE_Y}
+{   
+    
+    candies = std::vector<std::vector<Candy*>>(BOARD_SIZE_X, std::vector<Candy*>(BOARD_SIZE_Y));
+    
+    SDL_Point dstXY = {.x = initX, .y = initY};
+    for(size_t i = 0; i < candies.size(); i++)
+    {
+        dstXY.x = initX;
+        for(size_t j = 0; j < candies[i].size(); j++)
+        {
+            candies[i][j] = nullptr;
+            // do {
+            if(candies[i][j] != nullptr)
+            {
+                delete candies[i][j];
+                candies[i][j] = nullptr;
+            }
+            candies[i][j] = TextureManager::GetInstance().GetCandy(CandyType::NORMAL_CANDY, Candy::RandomColor());
+            // }while(MatchFound(candies[i][j]) == false);
+            candies[i][j]->SetDstRectXY(dstXY);
+            dstXY.x += CANDY_WIDTH_DST;
+        }
+        dstXY.y += CANDY_HEIGHT_DST;
+    }
 }
 
 void CandyCrush::HandleEvents()
@@ -23,8 +42,14 @@ void CandyCrush::HandleEvents()
                 running = false;
                 break;
             }
-            case SDL_KEYDOWN: {
-                // HandleKeyDownEvent(event);
+            case SDL_MOUSEBUTTONDOWN: {
+                int mouseX, mouseY;
+                SDL_GetMouseState(&mouseX, &mouseY);
+                SDL_Point *position = Candy::GetPosition(mouseX, mouseY);
+                if(position != nullptr)
+                    printf("Clicked (%d, %d) in (%d, %d)\n", mouseX, mouseY, position->x, position->y);
+                else
+                    printf("Clicked outside of the candy matrix\n");
                 break;
             }
             default: {
@@ -53,8 +78,9 @@ void CandyCrush::RenderBackground()
 
 void CandyCrush::RenderBoard()
 {
-    for(GameObject *candy : candies)
-        candy->Draw();
+    for(size_t i = 0; i < candies.size(); i++)
+        for(GameObject *candy : candies[i])
+            candy->Draw();
 }
 
 

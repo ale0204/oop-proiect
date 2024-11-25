@@ -12,7 +12,18 @@ void GameObject::Draw()
     SDL_RenderCopy(GUIManager::GetInstance().GetRenderer(), texture, NULL, NULL);
 }
 
-SDL_Texture* GameObject::GetTexture()
+SDL_Texture* GameObject::GetTexture(void)
 {
     return texture;
+}
+
+SDL_Rect GameObject::GetDstRect(void)
+{
+    return dstRect;
+}
+
+void GameObject::SetDstRectXY(const SDL_Point& point)
+{
+    dstRect.x = point.x;
+    dstRect.y = point.y;
 }

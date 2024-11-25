@@ -7,7 +7,8 @@ enum class CandyColor {
     YELLOW_CANDY,
     GREEN_CANDY,
     BLUE_CANDY,
-    PURPLE_CANDY
+    PURPLE_CANDY,
+    NUM_CANDIES
 };
 
 #endif /* CANDY_COLOR_H_ */

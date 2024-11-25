@@ -14,11 +14,11 @@ class TextureManager {
 private:
     const std::string spritesPath;
     const std::string backgroundPath;
-    std::vector<GameObject*> candies;
-    std::vector<GameObject*> verticalStripedCandies;
-    std::vector<GameObject*> horizontalStripedCandies;
-    std::vector<GameObject*> bombCandies;
-    GameObject *wildCandy;
+    std::vector<Candy*> candies;
+    std::vector<Candy*> verticalStripedCandies;
+    std::vector<Candy*> horizontalStripedCandies;
+    std::vector<Candy*> bombCandies;
+    Candy *wildCandy;
     GameObject *background;
 private:
     static TextureManager *instance;
@@ -26,17 +26,18 @@ private:
                    const std::string& backgroundPath = "../assets/images/background.png");
 public:
     static TextureManager& GetInstance();
-    GameObject* GetCandy(CandyType candyType, CandyColor candyColor);
+    Candy* GetCandy(CandyType candyType, CandyColor candyColor);
     GameObject* GetBackground(void);
 private:
     SDL_Texture* CreateTextureFromImage(SDL_Renderer *renderer, const char *path);
     void LoadGameObjects(SDL_Renderer *renderer);
-    void LoadCandies(SDL_Texture *board, std::vector<GameObject*>& candies);
-    void LoadVerticalStripedCandies(SDL_Texture *board, std::vector<GameObject*>& verticalStripedCandies);
-    void LoadHorizontalStripedCandies(SDL_Texture *board, std::vector<GameObject*>& horizontalStripedCandies);
-    void LoadBombCandies(SDL_Texture *board, std::vector<GameObject*>& bombCandies);
+    void LoadCandies(SDL_Texture *board, std::vector<Candy*>& candies);
+    // TODO altadata
+    void LoadVerticalStripedCandies(SDL_Texture *board, std::vector<Candy*>& verticalStripedCandies);
+    void LoadHorizontalStripedCandies(SDL_Texture *board, std::vector<Candy*>& horizontalStripedCandies);
+    void LoadBombCandies(SDL_Texture *board, std::vector<Candy*>& bombCandies);
     GameObject* LoadBackground(const char *path);
-    GameObject* LoadWildCandy(SDL_Texture *board);
+    Candy* LoadWildCandy(SDL_Texture *board);
 };
 
 #endif /* TEXTURE_MANAGER_H_ */

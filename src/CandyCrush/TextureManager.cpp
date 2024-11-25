@@ -1,11 +1,5 @@
 #include "../../include/CandyCrush/TextureManager.h"
-
-
-const int NUM_CANDIES = 6;
-const int CANDY_OFFSET_X = 0;
-const int CANDY_OFFSET_Y = 240;
-const int CANDY_WIDTH = 120;
-const int CANDY_HEIGHT = CANDY_WIDTH;
+#include "../../include/CandyCrush/Constants.h"
 
 TextureManager* TextureManager::instance = nullptr;
 
@@ -22,25 +16,25 @@ TextureManager& TextureManager::GetInstance()
     return *instance;
 }
 
-GameObject* TextureManager::GetCandy(CandyType candyType, CandyColor candyColor)
+Candy* TextureManager::GetCandy(CandyType candyType, CandyColor candyColor)
 {
     int candyColorIdx = static_cast<int>(candyColor);
     switch(candyType)
     {
         case CandyType::NORMAL_CANDY: {
-            return candies[candyColorIdx];
+            return new Candy(*candies[candyColorIdx]);
         }
         case CandyType::HORIZONTAL_STRIPED_CANDY: {
-            return horizontalStripedCandies[candyColorIdx];
+            return new Candy(*horizontalStripedCandies[candyColorIdx]);
         }
         case CandyType::VERTICAL_STRIPED_CANDY: {
-            return verticalStripedCandies[candyColorIdx];
+            return new Candy(*verticalStripedCandies[candyColorIdx]);
         }
         case CandyType::BOMB_CANDY: {
-            return bombCandies[candyColorIdx];
+            return new Candy(*bombCandies[candyColorIdx]);
         }
         case CandyType::WILD_CANDY: {
-            return wildCandy;
+            return new Candy(*wildCandy);
         }
     }
 }
@@ -77,29 +71,28 @@ void TextureManager::LoadGameObjects(SDL_Renderer *renderer)
     background = LoadBackground(backgroundPath.c_str());
 }
 
-void TextureManager::LoadCandies(SDL_Texture *board, std::vector<GameObject*>& candies)
+void TextureManager::LoadCandies(SDL_Texture *board, std::vector<Candy*>& candies)
 {
-    SDL_Rect srcRect = {.x = CANDY_OFFSET_X, .y = CANDY_OFFSET_Y, .w = CANDY_WIDTH, .h = CANDY_HEIGHT};
-    SDL_Rect dstRect = {.x = 50, .y = 50, .w = CANDY_WIDTH/2, .h = CANDY_HEIGHT/2};
+    SDL_Rect srcRect = {.x = CANDY_OFFSET_X, .y = CANDY_OFFSET_Y, .w = CANDY_WIDTH_SRC, .h = CANDY_HEIGHT_SRC};
+    SDL_Rect dstRect = {.x = 0, .y = 0, .w = CANDY_WIDTH_DST, .h = CANDY_HEIGHT_DST};
     for(int i = 0; i < NUM_CANDIES; i++)
     {
         candies.push_back(new Candy(board, srcRect, dstRect, static_cast<CandyColor>(i), CandyType::NORMAL_CANDY));
-        dstRect.x += dstRect.w;
         srcRect.x += srcRect.w;
     }
 }
 
-void TextureManager::LoadVerticalStripedCandies(SDL_Texture *board, std::vector<GameObject*>& verticalStripedCandies)
+void TextureManager::LoadVerticalStripedCandies(SDL_Texture *board, std::vector<Candy*>& verticalStripedCandies)
 {
 
 }
 
-void TextureManager::LoadHorizontalStripedCandies(SDL_Texture *board, std::vector<GameObject*>& horizontalStripedCandies)
+void TextureManager::LoadHorizontalStripedCandies(SDL_Texture *board, std::vector<Candy*>& horizontalStripedCandies)
 {
 
 }
 
-void TextureManager::LoadBombCandies(SDL_Texture *board, std::vector<GameObject*>& bombCandies)
+void TextureManager::LoadBombCandies(SDL_Texture *board, std::vector<Candy*>& bombCandies)
 {
 
 }
@@ -109,7 +102,7 @@ GameObject* TextureManager::LoadBackground(const char *path)
     return nullptr;
 }
 
-GameObject* TextureManager::LoadWildCandy(SDL_Texture *board)
+Candy* TextureManager::LoadWildCandy(SDL_Texture *board)
 {
     return nullptr;
 }

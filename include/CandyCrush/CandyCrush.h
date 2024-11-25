@@ -8,7 +8,9 @@
 
 class CandyCrush : public Game {
 private:
-    std::vector<GameObject*> candies;
+    std::vector<std::vector<Candy*>> candies;
+    const int BOARD_SIZE_X;
+    const int BOARD_SIZE_Y;
 protected:
     void RenderBackground();
     void RenderBoard();
