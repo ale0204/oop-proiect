@@ -1,5 +1,5 @@
 # Titlu proiect
-Joc 2D care interactioneaza cu o baza de date
+Candy Crush, joc care interactioneaza cu o baza de date
 ## Descriere proiect
 Acest proiect consta intr-un joc 2D care se conecteaza la o baza de date pentru a stoca rezultatele jucatorilor 
 
