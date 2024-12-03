@@ -5,9 +5,44 @@ Candy::Candy(SDL_Texture *texture, const SDL_Rect &srcRect, const SDL_Rect &dstR
     : GameObject(texture, srcRect, dstRect), color {color}, type {type}
 {}
 
-void Candy::Draw()
+void Candy::Draw() const
 {
     SDL_RenderCopy(GUIManager::GetInstance().GetRenderer(), texture, &srcRect, &dstRect);
+}
+
+GameObject* Candy::Clone()
+{
+    return new Candy(*this);
+}
+CandyColor Candy::GetColor(void) const
+{
+    return color;
+}
+
+CandyType Candy::GetType(void) const
+{
+    return type;
+}
+
+SDL_Point Candy::GetPosition(void) const
+{
+    return SDL_Point {.x = posX, .y = posY};
+}
+
+void Candy::SetPosition(int x, int y)
+{
+    posX = x;
+    posY = y;
+}
+
+void Candy::SwapCandies(Candy *candy1, Candy *candy2)
+{
+    // std::swap(candy1->srcRect, candy2->srcRect);
+    std::swap(candy1->dstRect, candy2->dstRect);
+    // std::swap(candy1->color, candy2->color);
+    // std::swap(candy1->type, candy2->type);
+    std::swap(candy1->posX, candy2->posX);
+    std::swap(candy1->posY, candy2->posY);
 }
 
 SDL_Point* Candy::GetPosition(int mouseX, int mouseY)

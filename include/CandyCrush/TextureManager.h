@@ -18,6 +18,7 @@ private:
     std::vector<Candy*> verticalStripedCandies;
     std::vector<Candy*> horizontalStripedCandies;
     std::vector<Candy*> bombCandies;
+    SDL_Texture *spritesheet;
     Candy *wildCandy;
     GameObject *background;
 private:
@@ -26,8 +27,8 @@ private:
                    const std::string& backgroundPath = "../assets/images/background.png");
 public:
     static TextureManager& GetInstance();
-    Candy* GetCandy(CandyType candyType, CandyColor candyColor);
-    GameObject* GetBackground(void);
+    Candy* GetCandy(CandyType candyType, CandyColor candyColor) const;
+    GameObject* GetBackground(void) const;
 private:
     SDL_Texture* CreateTextureFromImage(SDL_Renderer *renderer, const char *path);
     void LoadGameObjects(SDL_Renderer *renderer);

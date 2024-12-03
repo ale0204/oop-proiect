@@ -11,10 +11,11 @@ protected:
     SDL_Rect dstRect;
 public:
     GameObject(SDL_Texture *texture, const SDL_Rect& srcRect, const SDL_Rect& dstRect);
-    virtual void Draw();
-    SDL_Texture* GetTexture(void);
+    virtual void Draw() const;
+    SDL_Texture* GetTexture(void) const;
     void SetDstRectXY(const SDL_Point& point);
-    SDL_Rect GetDstRect(void);
+    SDL_Rect GetDstRect(void) const;
+    virtual GameObject* Clone(void);
     virtual ~GameObject() = default;
 };
 

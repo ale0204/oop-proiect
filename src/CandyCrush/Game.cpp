@@ -1,6 +1,7 @@
 #include "../../include/CandyCrush/Game.h"
 #include "../../include/CandyCrush/GUIManager.h"
 #include "../../include/CandyCrush/TextureManager.h"
+#include "../../include/CandyCrush/CandyCrush.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
@@ -11,16 +12,15 @@ Game::Game(const std::string& windowTitle, int x, int y, int w, int h, int fps)
     : running {true}, fps {fps}, frameTime{1000/static_cast<Uint64>(fps)}
 {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
-        exit(EXIT_FAILURE);
+        throw SDLInitException(std::string("SDL could not initialize! SDL_Error: ") + SDL_GetError() + '\n', 100);
     }
     if (TTF_Init() == -1) {
-        std::cerr << "TTF_Init failed: " << TTF_GetError() << std::endl;
+        throw TTFInitException(std::string("TTF_Init failed: ") + TTF_GetError() + '\n', 200);
         SDL_Quit();
         exit(EXIT_FAILURE);
     }
     if (IMG_Init(IMG_INIT_PNG) == 0) {
-        std::cerr << "IMG_Init failed: " << IMG_GetError() << std::endl;
+        throw IMGInitException(std::string("IMG_Init failed: ") + IMG_GetError() + '\n', 300);
         TTF_Quit(); SDL_Quit();
         exit(EXIT_FAILURE);
     }
@@ -65,7 +65,14 @@ void Game::Play()
 
 Game::~Game()
 {
+    std::cout << "~Game()\n";
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
-    SDL_Quit();
+    TTF_Quit(); SDL_Quit(); IMG_Quit();
+}
+
+std::ostream& operator<<(std::ostream& os, const Game& game)
+{
+    game.Afisare(os);
+    return os;
 }

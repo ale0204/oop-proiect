@@ -6,6 +6,7 @@ enum class CandyType {
     HORIZONTAL_STRIPED_CANDY,
     VERTICAL_STRIPED_CANDY,
     BOMB_CANDY,
-    WILD_CANDY
+    WILD_CANDY,
+    NUM_CANDIES
 };
 #endif /* CANDY_TYPE_H */

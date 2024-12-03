@@ -10,12 +10,8 @@ TestTableEntry::TestTableEntry(const TestTableEntry& other)
 
 TestTableEntry& TestTableEntry::operator=(const TestTableEntry& other)
 {
-    if(this != &other)
-    {
-        this->id = other.id;
-        this->name = other.name;
-        this->age = other.age;
-    }
+    TestTableEntry temp = other;
+    std::swap(*this, temp);
     return *this;
 }
 

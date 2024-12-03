@@ -13,8 +13,8 @@ public:
     static GUIManager& GetInstance();
     void SetWindow(SDL_Window *window);
     void SetRenderer(SDL_Renderer *renderer);
-    SDL_Window* GetWindow(void);
-    SDL_Renderer* GetRenderer(void);
+    SDL_Window* GetWindow(void) const;
+    SDL_Renderer* GetRenderer(void) const;
 };
 
 #endif /* GUI_MANAGER_H_ */

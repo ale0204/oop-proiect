@@ -17,10 +17,10 @@ void GUIManager::SetRenderer(SDL_Renderer *renderer) {
     this->renderer = renderer;
 }
 
-SDL_Window* GUIManager::GetWindow(void) { 
+SDL_Window* GUIManager::GetWindow(void) const { 
     return window; 
 }
 
-SDL_Renderer* GUIManager::GetRenderer(void) {
+SDL_Renderer* GUIManager::GetRenderer(void) const {
     return renderer;
 }

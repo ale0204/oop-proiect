@@ -28,6 +28,9 @@ add_executable(${PROJECT_NAME}
     src/CandyCrush/GameObject.cpp
     src/CandyCrush/GUIManager.cpp
     src/CandyCrush/TextureManager.cpp
+    src/CandyCrush/exceptions/SDLInitException.cpp
+    src/CandyCrush/exceptions/TTFInitException.cpp
+    src/CandyCrush/exceptions/IMGInitException.cpp
 )
 
 include(cmake/Options.cmake)

@@ -16,30 +16,35 @@ TextureManager& TextureManager::GetInstance()
     return *instance;
 }
 
-Candy* TextureManager::GetCandy(CandyType candyType, CandyColor candyColor)
+Candy* TextureManager::GetCandy(CandyType candyType, CandyColor candyColor) const
 {
     int candyColorIdx = static_cast<int>(candyColor);
     switch(candyType)
     {
         case CandyType::NORMAL_CANDY: {
-            return new Candy(*candies[candyColorIdx]);
+            return dynamic_cast<Candy*>(candies[candyColorIdx]->Clone());
         }
         case CandyType::HORIZONTAL_STRIPED_CANDY: {
-            return new Candy(*horizontalStripedCandies[candyColorIdx]);
+            return dynamic_cast<Candy*>(horizontalStripedCandies[candyColorIdx]->Clone());
         }
         case CandyType::VERTICAL_STRIPED_CANDY: {
-            return new Candy(*verticalStripedCandies[candyColorIdx]);
+            return dynamic_cast<Candy*>(verticalStripedCandies[candyColorIdx]->Clone());
         }
         case CandyType::BOMB_CANDY: {
-            return new Candy(*bombCandies[candyColorIdx]);
+            return dynamic_cast<Candy*>(bombCandies[candyColorIdx]->Clone());
         }
         case CandyType::WILD_CANDY: {
-            return new Candy(*wildCandy);
+            return dynamic_cast<Candy*>(wildCandy->Clone());
+        }
+        case CandyType::NUM_CANDIES:
+        default: {
+            break;
         }
     }
+    return nullptr;
 }
 
-GameObject* TextureManager::GetBackground(void)
+GameObject* TextureManager::GetBackground(void) const
 {
     return background;
 }
@@ -69,6 +74,8 @@ void TextureManager::LoadGameObjects(SDL_Renderer *renderer)
     LoadBombCandies(board, bombCandies);
     wildCandy = LoadWildCandy(board);
     background = LoadBackground(backgroundPath.c_str());
+    
+    spritesheet = board;
 }
 
 void TextureManager::LoadCandies(SDL_Texture *board, std::vector<Candy*>& candies)
@@ -84,25 +91,30 @@ void TextureManager::LoadCandies(SDL_Texture *board, std::vector<Candy*>& candie
 
 void TextureManager::LoadVerticalStripedCandies(SDL_Texture *board, std::vector<Candy*>& verticalStripedCandies)
 {
-
+    (void) board;
+    (void) verticalStripedCandies;
 }
 
 void TextureManager::LoadHorizontalStripedCandies(SDL_Texture *board, std::vector<Candy*>& horizontalStripedCandies)
 {
-
+    (void) board;
+    (void) horizontalStripedCandies;
 }
 
 void TextureManager::LoadBombCandies(SDL_Texture *board, std::vector<Candy*>& bombCandies)
 {
-
+    (void) board;
+    (void) bombCandies;
 }
 
 GameObject* TextureManager::LoadBackground(const char *path)
 {
+    (void) path;
     return nullptr;
 }
 
 Candy* TextureManager::LoadWildCandy(SDL_Texture *board)
 {
+    (void) board;
     return nullptr;
 }
