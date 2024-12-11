@@ -108,10 +108,11 @@ else()
     target_link_libraries(${PROJECT_NAME} PRIVATE ${SDL2_TTF_LIB_DIR}/libSDL2_ttf.so)
 
     # MySQL setup for Linux
-    find_package(MySQL REQUIRED)
+    set(MYSQL_DIR "/usr/lib/x86_64-linux-gnu/cmake/mysql")
 
-    # Link MySQL library
-    target_link_libraries(${PROJECT_NAME} PRIVATE MySQL::Client)
+    # Include MySQL headers and libraries
+    target_include_directories(${PROJECT_NAME} PRIVATE /usr/include/mysql)
+    target_link_libraries(${PROJECT_NAME} PRIVATE /usr/lib/x86_64-linux-gnu/libmysqlclient.so)
 endif()
 
 ###############################################################################
