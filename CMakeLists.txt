@@ -92,9 +92,32 @@ if (WIN32)
 else()
     # Find SDL2 automatically on Linux/macOS
     find_package(SDL2 REQUIRED)
+    
+    # FindSDL2_image.cmake
+    find_path(SDL2_IMAGE_INCLUDE_DIR SDL2/SDL_image.h)
+    find_library(SDL2_IMAGE_LIBRARY NAMES SDL2_image SDL2_image-2.0)
+    if(SDL2_IMAGE_INCLUDE_DIR AND SDL2_IMAGE_LIBRARY)
+        set(SDL2_image_FOUND TRUE)
+    else()
+        set(SDL2_image_FOUND FALSE)
+    endif()
+    
+    # FindSDL2_ttf.cmake
+    find_path(SDL2_TTF_INCLUDE_DIR SDL2/SDL_ttf.h)
+    find_library(SDL2_TTF_LIBRARY NAMES SDL2_ttf SDL2_ttf-2.0)
+    if(SDL2_TTF_INCLUDE_DIR AND SDL2_TTF_LIBRARY)
+        set(SDL2_ttf_FOUND TRUE)
+    else()
+        set(SDL2_ttf_FOUND FALSE)
+    endif()
+
+    list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Modules")
+
+    find_package(SDL2 REQUIRED)
     find_package(SDL2_image REQUIRED)
     find_package(SDL2_ttf REQUIRED)
-    target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2 PRIVATE SDL2_image::SDL2_image SDL2_ttf::SDL2_ttf)
+
+    target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2 SDL2_image::SDL2_image SDL2_ttf::SDL2_ttf)
 endif()
 
 ###############################################################################
