@@ -20,6 +20,7 @@ runs:
       run: |
         sudo apt-get update
         sudo apt-get install -y libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libmysqlclient-dev libssl-dev
+        export SDL_VIDEODRIVER=dummy
 
     # Verify SDL2, MySQL, and OpenSSL installation
     - name: Verify SDL2 installation

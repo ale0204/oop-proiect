@@ -86,7 +86,7 @@ int main()
     }
     catch (const SDLInitException& e) {
         std::cerr << "Library init failed " << e.what() << " " << e.GetErrorCode();
-        SDL_Quit();
+        Game::QuitLibraries();
     }
     catch (const IMGInitException& e) {
         std::cerr << "Font init failed " << e.what() << " " << e.GetErrorCode();
