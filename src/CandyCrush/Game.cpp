@@ -23,7 +23,6 @@ Game::Game(const std::string& windowTitle, int x, int y, int w, int h, int fps)
     }
     if (IMG_Init(IMG_INIT_PNG) == -1) {
         std::string exception_message = std::string("IMG_Init failed: ") + IMG_GetError() + '\n';
-        SDL_Quit(); TTF_Quit(); IMG_Quit();
         throw IMGInitException(exception_message, 300);
     }
 

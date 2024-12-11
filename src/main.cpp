@@ -78,7 +78,7 @@ void Demo()
     // );
 int main() 
 {   
-    // Demo();
+    Demo();
     try {
         std::unique_ptr<CandyCrush> candyCrush = std::make_unique<CandyCrush>();
         candyCrush->Play();
@@ -86,6 +86,7 @@ int main()
     }
     catch (const SDLInitException& e) {
         std::cerr << "Library init failed " << e.what() << " " << e.GetErrorCode();
+        SDL_Quit();
     }
     catch (const IMGInitException& e) {
         std::cerr << "Font init failed " << e.what() << " " << e.GetErrorCode();
