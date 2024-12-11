@@ -7,13 +7,13 @@ private:
     std::string host;
     std::string user;
     std::string password;
-    std::string db_name;
+    std::string dbName;
     unsigned short port;
     MYSQL *conn;
     static MySQLConnection *instance;
 private:
     MySQLConnection(std::string host = "alexandra-neamtu.ro", std::string user = "alexandra",
-                      std::string password = "alexandra", std::string db_name = "alexandra", unsigned short port = 3306);
+                      std::string password = "alexandra", std::string dbName = "alexandra", unsigned short port = 3306);
 public:
     static MySQLConnection& GetInstance();
 public:

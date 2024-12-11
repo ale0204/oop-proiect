@@ -9,7 +9,8 @@
 void Demo()
 {
     std::vector<DemoCandy*> candies;
-    for(int i = 0; i < 5; i++)
+    int numCandies = static_cast<int>(CandyType::NUM_CANDIES);
+    for(int i = 0; i < numCandies; i++)
     {
         int tip;
         std::cout << "1. NormalCandy\n";
@@ -18,8 +19,8 @@ void Demo()
         std::cout << "4. BombCandy\n";
         std::cout << "5. WildCandy\n";
         std::cout << "Introduceti tipul: ";
-        tip = 1 + rand() % (((int) CandyType::NUM_CANDIES) - 1);
-        if(tip < 0 || tip >= (int) CandyType::NUM_CANDIES)
+        tip = 1 + rand() % (numCandies - 1);
+        if(tip < 0 || tip >= numCandies)
         {
             std::cout << "Tip invalid\n";
             continue;
@@ -35,7 +36,7 @@ void Demo()
 
         if((hCandy = dynamic_cast<HorizontalStripedCandy*>(candy)) != nullptr) {
             hCandy->FunctieHorizontalStripedCandy();
-        } 
+        }
         else if((vCandy = dynamic_cast<VerticalStripedCandy*>(candy)) != nullptr) {
             vCandy->FunctieVerticalStripedCandy();
         } 

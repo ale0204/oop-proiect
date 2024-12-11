@@ -16,7 +16,7 @@ CandyCrush::CandyCrush(const std::string &windowTitle, int x, int y, int w, int 
         for(size_t j = 0; j < candies[i].size(); j++)
             candies[i][j] = nullptr;
     
-    SDL_Point dstXY = {.x = initX, .y = initY};
+    SDL_Point dstXY = SDL_Point({.x = initX, .y = initY});
     for(size_t i = 0; i < candies.size(); i++)
     {
         dstXY.x = initX;
@@ -96,18 +96,10 @@ void CandyCrush::Update()
 
         int numMatches = 0;
         if(MatchFound(candy1->GetPosition().x, candy1->GetPosition().y) == true) {
-            printf("Match1 found\n");
             numMatches++;
-        }
-        else {
-            printf("No match1\n");
         }
         if(MatchFound(candy2->GetPosition().x, candy2->GetPosition().y) == true) {
-            printf("Match2 found\n");
             numMatches++;
-        }
-        else {
-            printf("No match2\n");
         }
 
         // swap back after matchfinding is done

@@ -11,9 +11,40 @@ runs:
       run: |
         sudo apt-get update
         sudo apt-get install ninja-build
+        sudo apt-get install -y libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libmysqlclient-dev libssl-dev
         # https://github.com/llvm/llvm-project/issues/78354
         sudo sysctl vm.mmap_rnd_bits=28
+       # Verify SDL2, MySQL, and OpenSSL installation
+    - name: Verify SDL2 installation
+      run: |
+        if pkg-config --exists sdl2; then
+          echo "SDL2 is installed"
+        else
+          echo "SDL2 is NOT installed"
+          exit 1
+        fi
 
+    - name: Verify MySQL installation
+      run: |
+        if dpkg-query -l | grep -q libmysqlclient-dev; then
+          echo "MySQL client is installed"
+        else
+          echo "MySQL client is NOT installed"
+          exit 1
+        fi
+
+    - name: Verify OpenSSL installation
+      run: |
+        if dpkg-query -l | grep -q libssl-dev; then
+          echo "OpenSSL is installed"
+        else
+          echo "OpenSSL is NOT installed"
+          exit 1
+        fi
+
+    - name: Set up SDL2 path
+      run: |
+        export SDL2_DIR=/usr/include/SDL2
     # Also see https://github.com/actions/runner-images/discussions/9446#discussioncomment-8668538
     - name: Install Clang ${{ matrix.clang_ver }}
       shell: bash

@@ -13,7 +13,7 @@ TestTable& TestTable::GetInstance()
 std::vector<TestTableEntry> TestTable::Select()
 {
     std::string query;
-    query = "SELECT * FROM " + table_name  + ";";
+    query = "SELECT * FROM " + tableName  + ";";
     res = ExecuteSelectQuery(query);
     if(res == NULL)
         return entries;

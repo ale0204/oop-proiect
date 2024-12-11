@@ -91,7 +91,9 @@ if (WIN32)
 else()
     # Find SDL2 automatically on Linux/macOS
     find_package(SDL2 REQUIRED)
-    target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2)
+    find_package(SDL2_image REQUIRED)
+    find_package(SDL2_ttf REQUIRED)
+    target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2 PRIVATE SDL2_image::SDL2_image SDL2_ttf::SDL2_ttf)
 endif()
 
 ###############################################################################
