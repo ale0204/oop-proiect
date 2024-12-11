@@ -91,6 +91,7 @@ if (WIN32)
 else()
     # SDL2 setup for Linux
     find_package(SDL2 REQUIRED)
+    target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2)
 
     # Manually specify the paths for SDL2_image and SDL2_ttf
     set(SDL2_IMAGE_INCLUDE_DIR "/usr/include/SDL2")
@@ -103,9 +104,14 @@ else()
     target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_IMAGE_INCLUDE_DIR} ${SDL2_TTF_INCLUDE_DIR})
 
     # Link SDL2_image and SDL2_ttf libraries
-    target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2)
-    target_link_libraries(${PROJECT_NAME} PRIVATE ${SDL2_IMAGE_LIB_DIR}/libSDL2_image.a)
-    target_link_libraries(${PROJECT_NAME} PRIVATE ${SDL2_TTF_LIB_DIR}/libSDL2_ttf.a)
+    target_link_libraries(${PROJECT_NAME} PRIVATE ${SDL2_IMAGE_LIB_DIR}/libSDL2_image.so)
+    target_link_libraries(${PROJECT_NAME} PRIVATE ${SDL2_TTF_LIB_DIR}/libSDL2_ttf.so)
+
+    # MySQL setup for Linux
+    find_package(MySQL REQUIRED)
+
+    # Link MySQL library
+    target_link_libraries(${PROJECT_NAME} PRIVATE MySQL::Client)
 endif()
 
 ###############################################################################
