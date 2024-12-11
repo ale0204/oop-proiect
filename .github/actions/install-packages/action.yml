@@ -16,6 +16,7 @@ runs:
         sudo sysctl vm.mmap_rnd_bits=28
        # Verify SDL2, MySQL, and OpenSSL installation
     - name: Verify SDL2 installation
+      shell: bash
       run: |
         if pkg-config --exists sdl2; then
           echo "SDL2 is installed"
@@ -25,6 +26,7 @@ runs:
         fi
 
     - name: Verify MySQL installation
+      shell: bash
       run: |
         if dpkg-query -l | grep -q libmysqlclient-dev; then
           echo "MySQL client is installed"
@@ -34,6 +36,7 @@ runs:
         fi
 
     - name: Verify OpenSSL installation
+      shell: bash
       run: |
         if dpkg-query -l | grep -q libssl-dev; then
           echo "OpenSSL is installed"
@@ -43,6 +46,7 @@ runs:
         fi
 
     - name: Set up SDL2 path
+      shell: bash
       run: |
         export SDL2_DIR=/usr/include/SDL2
     # Also see https://github.com/actions/runner-images/discussions/9446#discussioncomment-8668538
