@@ -41,19 +41,20 @@ include(cmake/CopyHelper.cmake)
 target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE include)
 
 
-set(MY_LIBRARIES_DIR "${CMAKE_SOURCE_DIR}/libraries")
-# MySQL setup
-set(MySQL_INCLUDE_DIR "${MY_LIBRARIES_DIR}/MySQL/include")
-set(MySQL_LIB_DIR "${MY_LIBRARIES_DIR}/MySQL/lib")
-
-# Include MySQL headers
-target_include_directories(${PROJECT_NAME} PRIVATE ${MySQL_INCLUDE_DIR})
-
-# Link against libmysql.dll instead of mysqlclient.lib
-target_link_libraries(${PROJECT_NAME} PRIVATE "${MySQL_LIB_DIR}/libmysql.dll")
-
-# SDL2 setup for Windows
+# Setup for Windows
 if (WIN32)
+
+    set(MY_LIBRARIES_DIR "${CMAKE_SOURCE_DIR}/libraries")
+    # MySQL setup
+    set(MySQL_INCLUDE_DIR "${MY_LIBRARIES_DIR}/MySQL/include")
+    set(MySQL_LIB_DIR "${MY_LIBRARIES_DIR}/MySQL/lib")
+
+    # Include MySQL headers
+    target_include_directories(${PROJECT_NAME} PRIVATE ${MySQL_INCLUDE_DIR})
+
+    # Link against libmysql.dll instead of mysqlclient.lib
+    target_link_libraries(${PROJECT_NAME} PRIVATE "${MySQL_LIB_DIR}/libmysql.dll")
+
     # Set SDL2 include and library directories manually
     set(SDL2_INCLUDE_DIR "${MY_LIBRARIES_DIR}/SDL2/include")
     set(SDL2_LIB_DIR "${MY_LIBRARIES_DIR}/SDL2/lib")
