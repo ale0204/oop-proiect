@@ -14,14 +14,13 @@ runs:
         # https://github.com/llvm/llvm-project/issues/78354
         sudo sysctl vm.mmap_rnd_bits=28
 
-    - name: Install dependencies
+    - name: Install Linux dependencies
       shell: bash
       if: runner.os == 'Linux'
       run: |
         sudo apt-get update
         sudo apt-get install -y libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libmysqlclient-dev libssl-dev
-        export SDL_VIDEODRIVER=dummy
-
+      
     # Verify SDL2, MySQL, and OpenSSL installation
     - name: Verify SDL2 installation
       shell: bash
@@ -62,6 +61,13 @@ runs:
       run: |
         export SDL2_DIR=/usr/include/SDL2
     
+    - name: Install MacOS dependencies and set up SDL2 path
+      shell: bash
+      if: runner.os == 'macOS'
+      run: |
+        brew install sdl2 sdl2_image sdl2_ttf mysql openssl
+
+
     # Also see https://github.com/actions/runner-images/discussions/9446#discussioncomment-8668538
     - name: Install Clang ${{ matrix.clang_ver }}
       shell: bash
