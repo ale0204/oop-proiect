@@ -11,22 +11,20 @@
 Game::Game(const std::string& windowTitle, int x, int y, int w, int h, int fps)
     : running {true}, fps {fps}, frameTime{1000/static_cast<Uint64>(fps)}
 {
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+    window = NULL;
+    renderer = NULL;
+    if (SDL_Init(SDL_INIT_VIDEO) == -1) {
         std::string exception_message = std::string("SDL could not initialize! SDL_Error: ") + SDL_GetError() + '\n';
-        SDL_Quit();
         throw SDLInitException(exception_message, 100);
     }
     if (TTF_Init() == -1) {
         std::string exception_message = std::string("TTF_Init failed: ") + TTF_GetError() + '\n';
-        SDL_Quit(); TTF_Quit();
         throw TTFInitException(exception_message, 200);
-        exit(EXIT_FAILURE);
     }
-    if (IMG_Init(IMG_INIT_PNG) == 0) {
+    if (IMG_Init(IMG_INIT_PNG) == -1) {
         std::string exception_message = std::string("IMG_Init failed: ") + IMG_GetError() + '\n';
         SDL_Quit(); TTF_Quit(); IMG_Quit();
         throw IMGInitException(exception_message, 300);
-        exit(EXIT_FAILURE);
     }
 
     window = SDL_CreateWindow(windowTitle.c_str(), x, y, w, h, 0);

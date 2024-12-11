@@ -51,8 +51,8 @@ void Demo()
         delete candy;
 }
 
-int main() 
-{   
+// int main() 
+// {   
     // TestTable& testTable = TestTable::GetInstance();
     // std::vector<TestTableEntry> entries = testTable.Select();
 
@@ -76,8 +76,9 @@ int main()
     //         std::cout << entry << std::endl;
     //     }
     // );
-    
-    Demo();
+int main() 
+{   
+    // Demo();
     try {
         std::unique_ptr<CandyCrush> candyCrush = std::make_unique<CandyCrush>();
         candyCrush->Play();
