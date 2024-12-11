@@ -45,12 +45,12 @@ runs:
           exit 1
         fi
 
-    - name: Set up SDL2 path
-      shell: bash
-      run: |
-        export SDL2_DIR=/usr/lib/cmake/SDL2
-        export SDL2_image_DIR=/usr/lib/cmake/SDL2_image
-        export SDL2_ttf_DIR=/usr/lib/cmake/SDL2_ttf
+    # - name: Set up SDL2 path
+    #   shell: bash
+    #   run: |
+    #     export SDL2_DIR=/usr/lib/cmake/SDL2
+    #     export SDL2_image_DIR=/usr/lib/cmake/SDL2_image
+    #     export SDL2_ttf_DIR=/usr/lib/cmake/SDL2_ttf
 
     # Also see https://github.com/actions/runner-images/discussions/9446#discussioncomment-8668538
     - name: Install Clang ${{ matrix.clang_ver }}
