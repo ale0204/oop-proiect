@@ -16,6 +16,7 @@ runs:
 
     - name: Install dependencies
       shell: bash
+      if: runner.os == 'Linux'
       run: |
         sudo apt-get update
         sudo apt-get install -y libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libmysqlclient-dev libssl-dev
@@ -23,6 +24,7 @@ runs:
     # Verify SDL2, MySQL, and OpenSSL installation
     - name: Verify SDL2 installation
       shell: bash
+      if: runner.os == 'Linux'
       run: |
         if pkg-config --exists sdl2; then
           echo "SDL2 is installed"
@@ -33,6 +35,7 @@ runs:
 
     - name: Verify MySQL installation
       shell: bash
+      if: runner.os == 'Linux'
       run: |
         if dpkg-query -l | grep -q libmysqlclient-dev; then
           echo "MySQL client is installed"
@@ -43,6 +46,7 @@ runs:
 
     - name: Verify OpenSSL installation
       shell: bash
+      if: runner.os == 'Linux'
       run: |
         if dpkg-query -l | grep -q libssl-dev; then
           echo "OpenSSL is installed"
@@ -52,6 +56,7 @@ runs:
         fi
 
     - name: Set up SDL2 path
+      if: runner.os == 'Linux'
       shell: bash
       run: |
         export SDL2_DIR=/usr/include/SDL2
