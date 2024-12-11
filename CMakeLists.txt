@@ -90,34 +90,23 @@ if (WIN32)
             "$<TARGET_FILE_DIR:${PROJECT_NAME}>")
     endforeach()
 else()
-    # Find SDL2 automatically on Linux/macOS
+    # SDL2 setup for Linux
     find_package(SDL2 REQUIRED)
-    
-    # FindSDL2_image.cmake
-    find_path(SDL2_IMAGE_INCLUDE_DIR SDL2/SDL_image.h)
-    find_library(SDL2_IMAGE_LIBRARY NAMES SDL2_image SDL2_image-2.0)
-    if(SDL2_IMAGE_INCLUDE_DIR AND SDL2_IMAGE_LIBRARY)
-        set(SDL2_image_FOUND TRUE)
-    else()
-        set(SDL2_image_FOUND FALSE)
-    endif()
-    
-    # FindSDL2_ttf.cmake
-    find_path(SDL2_TTF_INCLUDE_DIR SDL2/SDL_ttf.h)
-    find_library(SDL2_TTF_LIBRARY NAMES SDL2_ttf SDL2_ttf-2.0)
-    if(SDL2_TTF_INCLUDE_DIR AND SDL2_TTF_LIBRARY)
-        set(SDL2_ttf_FOUND TRUE)
-    else()
-        set(SDL2_ttf_FOUND FALSE)
-    endif()
 
-    list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Modules")
+    # Manually specify the paths for SDL2_image and SDL2_ttf
+    set(SDL2_IMAGE_INCLUDE_DIR "/usr/include/SDL2")
+    set(SDL2_IMAGE_LIB_DIR "/usr/lib/x86_64-linux-gnu")
 
-    find_package(SDL2 REQUIRED)
-    find_package(SDL2_image REQUIRED)
-    find_package(SDL2_ttf REQUIRED)
+    set(SDL2_TTF_INCLUDE_DIR "/usr/include/SDL2")
+    set(SDL2_TTF_LIB_DIR "/usr/lib/x86_64-linux-gnu")
 
-    target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2 SDL2_image::SDL2_image SDL2_ttf::SDL2_ttf)
+    # Include SDL2_image and SDL2_ttf headers
+    target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_IMAGE_INCLUDE_DIR} ${SDL2_TTF_INCLUDE_DIR})
+
+    # Link SDL2_image and SDL2_ttf libraries
+    target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2)
+    target_link_libraries(${PROJECT_NAME} PRIVATE ${SDL2_IMAGE_LIB_DIR}/libSDL2_image.a)
+    target_link_libraries(${PROJECT_NAME} PRIVATE ${SDL2_TTF_LIB_DIR}/libSDL2_ttf.a)
 endif()
 
 ###############################################################################
