@@ -13,9 +13,10 @@ CandyCrush::CandyCrush(const std::string &windowTitle, int x, int y, int w, int 
     checkNewMatches = false;
     updateAfterDeletion = false;
     movingAnimation = false;
-    doneUpdating = false;
+    doneMovingAnimation = false;
     candy1 = nullptr;
     candy2 = nullptr;
+    animationTime = 200; // ms
     candies = std::vector<std::vector<Candy*>>(BOARD_SIZE_X, std::vector<Candy*>(BOARD_SIZE_Y));
     for(size_t i = 0; i < candies.size(); i++)
         for(size_t j = 0; j < candies[i].size(); j++)
@@ -62,8 +63,8 @@ void CandyCrush::HandleEvents()
                     mouseDown = true;
                     candy1 = candy;
                     candy2 = nullptr;
-                    SDL_Point position = candy->GetPosition();
-                    printf("Clicked (%d, %d) in (%d, %d)\n", mouseX, mouseY, position.x, position.y);
+                    // SDL_Point position = candy->GetPosition();
+                    // printf("Clicked (%d, %d) in (%d, %d)\n", mouseX, mouseY, position.x, position.y);
                 }
                 break;
             }
@@ -75,9 +76,9 @@ void CandyCrush::HandleEvents()
                 {
                     shouldSwap = true;
                     candy2 = candy;
-                    SDL_Point position1 = candy1->GetPosition();
-                    SDL_Point position2 = candy2->GetPosition();
-                    printf("Moved to (%d, %d) in (%d, %d) from (%d, %d)\n", mouseX, mouseY, position2.x, position2.y, position1.x, position1.y);
+                    // SDL_Point position1 = candy1->GetPosition();
+                    // SDL_Point position2 = candy2->GetPosition();
+                    // printf("Moved to (%d, %d) in (%d, %d) from (%d, %d)\n", mouseX, mouseY, position2.x, position2.y, position1.x, position1.y);
                 }
                 break;
             }
@@ -121,6 +122,8 @@ void CandyCrush::Update()
         {
             for(size_t j = 0; j < candies[i].size(); j++)
             {
+                if(candies[i][j] == nullptr)
+                    continue;
                 if(candies[i][j]->ShouldDelete() == true)
                 {
                     delete candies[i][j];
@@ -134,54 +137,54 @@ void CandyCrush::Update()
     if(updateAfterDeletion == true)
     {
         UpdateAfterDeletion();
-        FillEmptyPositions();
+        movingAnimation = true;
         updateAfterDeletion = false;
+        // create new candies on the remaining positions
         // start checking for matches on the updated board
-        checkNewMatches = true;
-        // movingAnimation = true;
+        FillEmptyPositions();
     }
-    // if(movingAnimation == true)
-    // {
-    //     movingAnimation = MoveCandies();
-    //     if(movingAnimation == false)
-    //         doneUpdating = true;
-    // }
-    // if(doneUpdating == true)
-    // {
-        // // create new candies on the remaining positions
-        // FillEmptyPositions();
-        // doneUpdating = false;
-        // start checking for matches on the updated board
-        // checkNewMatches = true;
-    // }
+    if(movingAnimation == true)
+    {
+        movingAnimation = MoveCandies();
+        printf("Moving Animation...\n");
+        if(movingAnimation == false)
+        {
+            printf("Done moving start filling empty positions\n");
+            doneMovingAnimation = true;
+        }
+    }
+    if(doneMovingAnimation == true)
+    {
+        checkNewMatches = true;
+    }
     if(checkNewMatches == true)
     {
         if(CheckBoardForMatches() == true)
             shouldDelete = true;
+        checkNewMatches = false;
     }
 }
 
 void CandyCrush::UpdateAfterDeletion(void)
 {
     // move all candies down, by iterating through all rows from bottom to top
+    // for an empty position, find the nearest candy to fill it
+    // look for the first not null candy for the swap of positions
+    // and fill the empty position with the found candy
+    // mark the found candy position null 
+    // to continue iterating and filling it as well
     for (int i = BOARD_SIZE_X-1; i >= 0; i--)
     {
         for (int j = 0; j < BOARD_SIZE_Y; j++)
         {
-            // for an empty position, find the nearest candy to fill it
             if (candies[i][j] == nullptr)
             {
-                // look for the first not null candy for the swap of positions
-                // and fill the empty position with the found candy
-                // mark the found candy position null 
-                // to continue iterating and filling it as well
                 for (int k = i-1; k >= 0; k--)
                 {
                     if (candies[k][j] != nullptr)
                     {
                         candies[i][j] = candies[k][j];
                         candies[i][j]->SetPosition(i, j);
-                        candies[i][j]->SetDstRectXY(SDL_Point{initX + j*CANDY_WIDTH_DST, initY+i*CANDY_HEIGHT_DST});
                         candies[i][j]->SetMoving(true, i-k);
                         candies[k][j] = nullptr;
                         break;
@@ -201,7 +204,8 @@ void CandyCrush::FillEmptyPositions(void)
             if(candies[i][j] == nullptr)
             {
                 candies[i][j] = Candy::GenerateRandomCandy();
-                candies[i][j]->SetDstRectXY(SDL_Point{initX + j*CANDY_WIDTH_DST, initY+i*CANDY_HEIGHT_DST});
+                candies[i][j]->SetDstRectXY(SDL_Point{initX + j*CANDY_WIDTH_DST, initY-CANDY_HEIGHT_DST});
+                candies[i][j]->SetMoving(true, i+1);
                 candies[i][j]->SetPosition(i, j);
             }
         }
@@ -210,21 +214,23 @@ void CandyCrush::FillEmptyPositions(void)
 
 bool CandyCrush::MoveCandies(void)
 {
-    int animationTime = 200; // ms
-    int dy = CANDY_HEIGHT_DST*animationTime/(fps*1000);
+    float dy = 1000*CANDY_HEIGHT_DST/(fps*animationTime);
     bool stillMoving = false;
     for (int i = 0; i < BOARD_SIZE_X; i++)
     {
         for (int j = 0; j < BOARD_SIZE_Y; j++)
         {
             SDL_Point dstPos = {initX + j*CANDY_WIDTH_DST, initY + i*CANDY_HEIGHT_DST};
+            if(candies[i][j] == nullptr)
+                continue;
             if(candies[i][j]->IsMoving() == false)
                 continue;
 
             stillMoving = true;
             candies[i][j]->MoveY(dy);
-            if(candies[i][j]->GetDstRect().y <= dstPos.y)
+            if(candies[i][j]->GetDstRect().y >= dstPos.y)
             {
+                printf("Stopped moving candy (%d, %d)\n", i, j);
                 candies[i][j]->SetDstRectXY(dstPos);
                 candies[i][j]->SetMoving(false);
             }
@@ -269,6 +275,8 @@ void CandyCrush::SwapCandies(Candy *candy1, Candy *candy2)
 }
 int CandyCrush::CheckColorMatch(int x, int y, CandyColor color)
 {
+    if(candies[x][y] == nullptr)
+        return 0;
     return static_cast<int>(candies[x][y]->GetColor() == color || candies[x][y]->GetType() == CandyType::WILD_CANDY);
 }
 

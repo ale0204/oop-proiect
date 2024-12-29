@@ -43,11 +43,11 @@ void Candy::SetPosition(int x, int y)
 void Candy::MarkForDeletion(void)
 {
     shouldDelete = true;
-    printf("Should delete (%d, %d)\n", posX, posY);
 }
 
 void Candy::MoveY(int dy)
 {
+    printf("Moving (%d, %d) %d pixels\n", posX, posY, positionsToMove*dy);
     dstRect.y += positionsToMove*dy;
 }
 bool Candy::ShouldDelete(void) const

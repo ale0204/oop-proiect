@@ -13,6 +13,7 @@ private:
     std::vector<std::vector<Candy*>> candies;
     Candy *candy1, *candy2;
     int mouseX, mouseY;
+    int animationTime;
     bool mouseDown;
     bool isSwapping;
     bool shouldSwap;
@@ -20,7 +21,7 @@ private:
     bool checkNewMatches;
     bool updateAfterDeletion;
     bool movingAnimation;
-    bool doneUpdating;
+    bool doneMovingAnimation;
     const int BOARD_SIZE_X, BOARD_SIZE_Y;
 private:
     void RenderBackground() const noexcept;
