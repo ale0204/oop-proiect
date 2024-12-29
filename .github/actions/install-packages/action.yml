@@ -66,6 +66,9 @@ runs:
       if: runner.os == 'macOS'
       run: |
         brew install sdl2 sdl2_image sdl2_ttf mysql openssl
+        export SDL2_DIR=/opt/homebrew/lib/cmake/SDL2  # Adjust based on your installation
+        export SDL2_image_DIR=/opt/homebrew/lib/cmake/SDL2_image
+        export SDL2_ttf_DIR=/opt/homebrew/lib/cmake/SDL2_ttf
 
 
     # Also see https://github.com/actions/runner-images/discussions/9446#discussioncomment-8668538

@@ -16,14 +16,25 @@ private:
     bool mouseDown;
     bool isSwapping;
     bool shouldSwap;
+    bool shouldDelete;
+    bool checkNewMatches;
+    bool updateAfterDeletion;
+    bool movingAnimation;
+    bool doneUpdating;
     const int BOARD_SIZE_X, BOARD_SIZE_Y;
 private:
     void RenderBackground() const noexcept;
     void RenderBoard() const;
     void SwapCandies(Candy *candy1, Candy *candy2);
-    bool MatchFound(int x, int y);
+    bool MarkMatchFound(int x, int y, bool mark = true);
     int CheckColorMatch(int x, int y, CandyColor color);
     Candy* GetCandyFromMouse(void);
+    void MarkRowForDeletion(int row) const;
+    void MarkColumnForDeletion(int col) const;
+    void UpdateAfterDeletion(void);
+    bool MoveCandies(void);
+    void FillEmptyPositions(void);
+    bool CheckBoardForMatches(void);
     virtual void HandleEvents()  override;
     virtual void Update() override;
     virtual void Render() const override;

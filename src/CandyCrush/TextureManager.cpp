@@ -80,8 +80,8 @@ void TextureManager::LoadGameObjects(SDL_Renderer *renderer)
 
 void TextureManager::LoadCandies(SDL_Texture *board, std::vector<Candy*>& candies)
 {
-    SDL_Rect srcRect = {.x = CANDY_OFFSET_X, .y = CANDY_OFFSET_Y, .w = CANDY_WIDTH_SRC, .h = CANDY_HEIGHT_SRC};
-    SDL_Rect dstRect = {.x = 0, .y = 0, .w = CANDY_WIDTH_DST, .h = CANDY_HEIGHT_DST};
+    SDL_Rect srcRect = {CANDY_OFFSET_X, CANDY_OFFSET_Y, CANDY_WIDTH_SRC, CANDY_HEIGHT_SRC};
+    SDL_Rect dstRect = {0, 0, CANDY_WIDTH_DST, CANDY_HEIGHT_DST};
     for(int i = 0; i < NUM_CANDIES; i++)
     {
         candies.push_back(new Candy(board, srcRect, dstRect, static_cast<CandyColor>(i), CandyType::NORMAL_CANDY));

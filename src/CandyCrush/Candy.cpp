@@ -1,16 +1,19 @@
 #include "../../include/CandyCrush/Candy.h"
 #include "../../include/CandyCrush/Constants.h"
+#include "../../include/CandyCrush/TextureManager.h"
 
 Candy::Candy(SDL_Texture *texture, const SDL_Rect &srcRect, const SDL_Rect &dstRect, CandyColor color, CandyType type)
-    : GameObject(texture, srcRect, dstRect), color {color}, type {type}
-{}
+    : GameObject(texture, srcRect, dstRect), color {color}, type {type}, shouldDelete {false}, isMoving {false}
+{
+    positionsToMove = 0;
+}
 
 void Candy::Draw() const
 {
     SDL_RenderCopy(GUIManager::GetInstance().GetRenderer(), texture, &srcRect, &dstRect);
 }
 
-GameObject* Candy::Clone()
+Candy* Candy::Clone()
 {
     return new Candy(*this);
 }
@@ -26,7 +29,9 @@ CandyType Candy::GetType(void) const
 
 SDL_Point Candy::GetPosition(void) const
 {
-    return SDL_Point {.x = posX, .y = posY};
+    SDL_Point point;
+    point.x = posX; point.y = posY;
+    return point;
 }
 
 void Candy::SetPosition(int x, int y)
@@ -35,6 +40,31 @@ void Candy::SetPosition(int x, int y)
     posY = y;
 }
 
+void Candy::MarkForDeletion(void)
+{
+    shouldDelete = true;
+    printf("Should delete (%d, %d)\n", posX, posY);
+}
+
+void Candy::MoveY(int dy)
+{
+    dstRect.y += positionsToMove*dy;
+}
+bool Candy::ShouldDelete(void) const
+{
+    return shouldDelete;
+}
+
+bool Candy::IsMoving(void) const
+{
+    return isMoving;
+}
+
+void Candy::SetMoving(bool moving, int positionsToMove)
+{
+    this->positionsToMove = positionsToMove;
+    isMoving = moving;
+}
 void Candy::SwapCandies(Candy *candy1, Candy *candy2)
 {
     // std::swap(candy1->srcRect, candy2->srcRect);
@@ -64,4 +94,9 @@ SDL_Point* Candy::GetPosition(int mouseX, int mouseY)
 CandyColor Candy::RandomColor(void)
 {
     return static_cast<CandyColor>(rand() % static_cast<int>(CandyColor::NUM_CANDIES));
+}
+
+Candy* Candy::GenerateRandomCandy(void)
+{
+    return TextureManager::GetInstance().GetCandy(CandyType::NORMAL_CANDY, RandomColor());
 }
