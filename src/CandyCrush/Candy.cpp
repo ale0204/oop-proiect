@@ -67,10 +67,7 @@ void Candy::SetMoving(bool moving, int positionsToMove)
 }
 void Candy::SwapCandies(Candy *candy1, Candy *candy2)
 {
-    // std::swap(candy1->srcRect, candy2->srcRect);
     std::swap(candy1->dstRect, candy2->dstRect);
-    // std::swap(candy1->color, candy2->color);
-    // std::swap(candy1->type, candy2->type);
     std::swap(candy1->posX, candy2->posX);
     std::swap(candy1->posY, candy2->posY);
 }
