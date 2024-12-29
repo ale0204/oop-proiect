@@ -5,7 +5,6 @@
 Candy::Candy(SDL_Texture *texture, const SDL_Rect &srcRect, const SDL_Rect &dstRect, CandyColor color, CandyType type)
     : GameObject(texture, srcRect, dstRect), color {color}, type {type}, shouldDelete {false}, isMoving {false}
 {
-    positionsToMove = 0;
 }
 
 void Candy::Draw() const
@@ -47,8 +46,7 @@ void Candy::MarkForDeletion(void)
 
 void Candy::MoveY(int dy)
 {
-    printf("Moving (%d, %d) %d pixels\n", posX, posY, positionsToMove*dy);
-    dstRect.y += positionsToMove*dy;
+    dstRect.y += dy;
 }
 bool Candy::ShouldDelete(void) const
 {
@@ -60,9 +58,8 @@ bool Candy::IsMoving(void) const
     return isMoving;
 }
 
-void Candy::SetMoving(bool moving, int positionsToMove)
+void Candy::SetMoving(bool moving)
 {
-    this->positionsToMove = positionsToMove;
     isMoving = moving;
 }
 void Candy::SwapCandies(Candy *candy1, Candy *candy2)

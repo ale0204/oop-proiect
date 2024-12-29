@@ -1,0 +1,12 @@
+#ifndef GAMESTATE_H_
+#define GAMESTATE_H_
+
+enum class GameState {
+    DEFAULT,
+    SWAP_CANDIES,
+    DELETE_CANDIES,
+    UPDATE_BOARD_AFTER_DELETION,
+    MOVING_ANIMATION,
+    CHECK_FOR_MATCHES
+};
+#endif /* GAMESTATE_H_ */
