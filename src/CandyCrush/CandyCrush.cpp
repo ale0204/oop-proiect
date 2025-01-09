@@ -160,7 +160,13 @@ void CandyCrush::Update()
         case GameState::SWAP_CANDIES: {
             bool matchFound = SwapCandiesState();
             // Mark candies for deletion when a match is found
-            gameState = (matchFound == true) ? GameState::DELETE_CANDIES : GameState::DEFAULT;
+            gameState = (matchFound == true) ? GameState::SWAPPING_ANIMATION : GameState::DEFAULT;
+            break;
+        }
+        case GameState::SWAPPING_ANIMATION: {
+            bool doneSwapping = SwapCandiesContinuously();
+            if(doneSwapping == true)
+                gameState = GameState::DELETE_CANDIES;
             break;
         }
         case GameState::DELETE_CANDIES: {
@@ -267,6 +273,17 @@ void CandyCrush::SwapCandies(Candy *candy1, Candy *candy2)
     candies[pos2.x][pos2.y] = candy1;
     Candy::SwapCandies(candy1, candy2);
 }
+
+bool CandyCrush::SwapCandiesContinuously(void)
+{
+    // SDL_Point pos1 = candy1->GetPosition();
+    // SDL_Point pos2 = candy2->GetPosition();
+    // int dx = pos1.x - pos2.x;
+    // int dy = pos1.y - pos2.y;
+
+    return true;
+}
+
 int CandyCrush::CheckColorMatch(int x, int y, CandyColor color)
 {
     if(candies[x][y] == nullptr)
@@ -389,6 +406,7 @@ void CandyCrush::MarkRowForDeletion(int row) const
             candies[row][idx]->MarkForDeletion();
     }
 }
+
 void CandyCrush::MarkColumnForDeletion(int col) const
 {
     // suppose the first candy is the one that produced the colmatch

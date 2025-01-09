@@ -9,7 +9,7 @@
 #include "GUIManager.h"
 #include "enums/CandyColor.h"
 #include "enums/CandyType.h"
-
+#define CC_RELEASE 1
 class TextureManager {
 private:
     const std::string spritesPath;
@@ -23,8 +23,13 @@ private:
     GameObject *background;
 private:
     static TextureManager *instance;
+#ifdef CC_RELEASE
+    TextureManager(const std::string& spritesPath = "assets/images/candy_crush_spritesheet.png",
+                   const std::string& backgroundPath = "assets/images/background.png");
+#else
     TextureManager(const std::string& spritesPath = "../assets/images/candy_crush_spritesheet.png",
                    const std::string& backgroundPath = "../assets/images/background.png");
+#endif
 public:
     static TextureManager& GetInstance();
     Candy* GetCandy(CandyType candyType, CandyColor candyColor) const;

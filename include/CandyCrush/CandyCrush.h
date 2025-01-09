@@ -22,6 +22,7 @@ private:
     void RenderBackground() const noexcept;
     void RenderBoard() const;
     void SwapCandies(Candy *candy1, Candy *candy2);
+    bool SwapCandiesContinuously(void);
     bool SwapCandiesState(void);
     void DeleteCandiesState(void);
     bool MarkMatchFound(int x, int y, bool mark = true);
