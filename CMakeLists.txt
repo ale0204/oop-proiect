@@ -42,22 +42,13 @@ target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE include)
 
 
 set(MY_LIBRARIES_DIR "${CMAKE_SOURCE_DIR}/libraries")
-# MySQL setup
-set(MySQL_INCLUDE_DIR "${MY_LIBRARIES_DIR}/MySQL/include")
-set(MySQL_LIB_DIR "${MY_LIBRARIES_DIR}/MySQL/lib")
-
-# Include MySQL headers
-target_include_directories(${PROJECT_NAME} PRIVATE ${MySQL_INCLUDE_DIR})
-
-# Link against libmysql.dll instead of mysqlclient.lib
-target_link_libraries(${PROJECT_NAME} PRIVATE "${MySQL_LIB_DIR}/libmysql.dll")
 
 # SDL2 setup for Windows
 if (WIN32)
     # Set SDL2 include and library directories manually
     set(SDL2_INCLUDE_DIR "${MY_LIBRARIES_DIR}/SDL2/include")
     set(SDL2_LIB_DIR "${MY_LIBRARIES_DIR}/SDL2/lib")
-    set(SDL2_IMAGE_LIB_DIR "${MY_LIBRARIES_DIR}/SDL2_Image/lib")
+    set(SDL2_IMAGE_LIB_DIR "${MY_LIBRARIES_DIR}/SDL2_image/lib")
     set(SDL2_TTF_LIB_DIR "${MY_LIBRARIES_DIR}/SDL2_ttf/lib")
     # MySQL setup (Windows specific paths)
     set(MySQL_INCLUDE_DIR "${MY_LIBRARIES_DIR}/MySQL/include")
@@ -66,9 +57,28 @@ if (WIN32)
     target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIR} ${MySQL_INCLUDE_DIR})
     target_link_directories(${PROJECT_NAME} PRIVATE ${SDL2_LIB_DIR} ${MySQL_LIB_DIR} ${SDL2_IMAGE_LIB_DIR}
         ${SDL2_TTF_LIB_DIR})
-    target_link_libraries(${PROJECT_NAME} PRIVATE "${SDL2_LIB_DIR}/libSDL2.a" "${SDL2_LIB_DIR}/libSDL2main.a" 
-        "${SDL2_IMAGE_LIB_DIR}/libSDL2_image.a" "${SDL2_TTF_LIB_DIR}/libSDL2_ttf.a"
-        user32 gdi32 winmm imm32 rpcrt4 setupapi version)
+    
+    # Check if AddressSanitizer is enabled and use appropriate libraries
+    get_target_property(COMPILE_OPTIONS ${PROJECT_NAME} COMPILE_OPTIONS)
+    if(COMPILE_OPTIONS)
+        string(FIND "${COMPILE_OPTIONS}" "fsanitize=address" ASAN_FOUND)
+    else()
+        set(ASAN_FOUND -1)
+    endif()
+    
+    if(ASAN_FOUND GREATER -1)
+        # Use DLL import libraries for ASAN builds to avoid COMDAT issues
+        target_link_libraries(${PROJECT_NAME} PRIVATE "${SDL2_LIB_DIR}/libSDL2.dll.a" "${SDL2_LIB_DIR}/libSDL2main.a" 
+            "${SDL2_IMAGE_LIB_DIR}/libSDL2_image.dll.a" "${SDL2_TTF_LIB_DIR}/libSDL2_ttf.dll.a"
+            "${MySQL_LIB_DIR}/libmysql.lib"
+            user32 gdi32 winmm imm32 rpcrt4 setupapi version)
+    else()
+        # Use static libraries for regular builds
+        target_link_libraries(${PROJECT_NAME} PRIVATE "${SDL2_LIB_DIR}/libSDL2.a" "${SDL2_LIB_DIR}/libSDL2main.a" 
+            "${SDL2_IMAGE_LIB_DIR}/libSDL2_image.a" "${SDL2_TTF_LIB_DIR}/libSDL2_ttf.a"
+            "${MySQL_LIB_DIR}/libmysql.lib"
+            user32 gdi32 winmm imm32 rpcrt4 setupapi version)
+    endif()
     # List the DLLs to copy
     set(DLL_FILES
     "${MY_LIBRARIES_DIR}/SDL2/bin/SDL2.dll"
@@ -89,20 +99,87 @@ if (WIN32)
             "$<TARGET_FILE_DIR:${PROJECT_NAME}>")
     endforeach()
 else()
-    # Find SDL2 automatically on Linux/macOS
-    find_package(PkgConfig REQUIRED)
-    pkg_check_modules(SDL2 REQUIRED sdl2)
-    pkg_check_modules(SDL2_IMAGE REQUIRED SDL2_image)
-    pkg_check_modules(SDL2_TTF REQUIRED SDL2_ttf)
-    
-    target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${SDL2_TTF_INCLUDE_DIRS})
-    target_link_libraries(${PROJECT_NAME} PRIVATE ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_TTF_LIBRARIES})
-    target_compile_options(${PROJECT_NAME} PRIVATE ${SDL2_CFLAGS_OTHER} ${SDL2_IMAGE_CFLAGS_OTHER} ${SDL2_TTF_CFLAGS_OTHER})
+    if(APPLE)
+        # macOS Dependencies - Use FindPackage approach
+        find_package(PkgConfig REQUIRED)
+        
+        # Explicitly exclude Windows libraries directory from all searches
+        set(CMAKE_IGNORE_PATH "${CMAKE_SOURCE_DIR}/libraries")
+        
+        # Set Homebrew prefix
+        execute_process(COMMAND brew --prefix OUTPUT_VARIABLE BREW_PREFIX OUTPUT_STRIP_TRAILING_WHITESPACE)
+        set(CMAKE_PREFIX_PATH "${BREW_PREFIX}")
+        
+        # Try to find SDL2 using pkg-config
+        pkg_check_modules(SDL2 REQUIRED sdl2)
+        pkg_check_modules(SDL2_IMAGE REQUIRED SDL2_image)  
+        pkg_check_modules(SDL2_TTF REQUIRED SDL2_ttf)
+        
+        # Find MySQL manually for macOS since mysql-client doesn't provide mysqlclient.pc
+        # Use NO_DEFAULT_PATH to avoid finding Windows libraries in libraries/MySQL/
+        find_path(MYSQL_INCLUDE_DIR mysql.h 
+            PATHS ${BREW_PREFIX}/include/mysql ${BREW_PREFIX}/opt/mysql-client/include/mysql
+            NO_DEFAULT_PATH)
+        find_library(MYSQL_LIBRARY mysqlclient 
+            PATHS ${BREW_PREFIX}/lib ${BREW_PREFIX}/opt/mysql-client/lib
+            NO_DEFAULT_PATH)
+        
+        # Verify we found a proper macOS library (not Windows DLL)
+        if(MYSQL_LIBRARY)
+            get_filename_component(MYSQL_LIB_EXT ${MYSQL_LIBRARY} EXT)
+            if(MYSQL_LIB_EXT STREQUAL ".dll")
+                message(WARNING "Found Windows DLL instead of macOS library: ${MYSQL_LIBRARY}")
+                unset(MYSQL_LIBRARY CACHE)
+                set(MYSQL_LIBRARY "")
+            endif()
+        endif()
+        
+        if(MYSQL_INCLUDE_DIR AND MYSQL_LIBRARY)
+            set(MYSQL_FOUND TRUE)
+            set(MYSQL_INCLUDE_DIRS ${MYSQL_INCLUDE_DIR})
+            set(MYSQL_LIBRARIES ${MYSQL_LIBRARY})
+            message(STATUS "Found MySQL: ${MYSQL_LIBRARY}")
+        else()
+            message(FATAL_ERROR "MySQL client library not found in Homebrew paths")
+        endif()
+        
+        target_include_directories(${PROJECT_NAME} PRIVATE 
+            ${SDL2_INCLUDE_DIRS} 
+            ${SDL2_IMAGE_INCLUDE_DIRS} 
+            ${SDL2_TTF_INCLUDE_DIRS}
+            ${MYSQL_INCLUDE_DIRS})
+            
+        target_link_directories(${PROJECT_NAME} PRIVATE 
+            ${SDL2_LIBRARY_DIRS} 
+            ${SDL2_IMAGE_LIBRARY_DIRS} 
+            ${SDL2_TTF_LIBRARY_DIRS})
+            
+        target_link_libraries(${PROJECT_NAME} PRIVATE 
+            ${SDL2_LIBRARIES} 
+            ${SDL2_IMAGE_LIBRARIES} 
+            ${SDL2_TTF_LIBRARIES}
+            ${MYSQL_LIBRARIES})
+            
+        target_compile_options(${PROJECT_NAME} PRIVATE 
+            ${SDL2_CFLAGS_OTHER} 
+            ${SDL2_IMAGE_CFLAGS_OTHER} 
+            ${SDL2_TTF_CFLAGS_OTHER})
+        
+    else()
+        # Linux Dependencies  
+        find_package(PkgConfig REQUIRED)
+        pkg_check_modules(SDL2 REQUIRED sdl2)
+        pkg_check_modules(SDL2_IMAGE REQUIRED SDL2_image)
+        pkg_check_modules(SDL2_TTF REQUIRED SDL2_ttf)
+        
+        target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${SDL2_TTF_INCLUDE_DIRS})
+        target_link_libraries(${PROJECT_NAME} PRIVATE ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_TTF_LIBRARIES})
+        target_compile_options(${PROJECT_NAME} PRIVATE ${SDL2_CFLAGS_OTHER} ${SDL2_IMAGE_CFLAGS_OTHER} ${SDL2_TTF_CFLAGS_OTHER})
 
-    # MySQL setup for Linux
-    target_include_directories(${PROJECT_NAME} PRIVATE /usr/include/mysql)
-    target_link_libraries(${PROJECT_NAME} PRIVATE mysqlclient)
-endif()
+        # MySQL setup for Linux
+        target_include_directories(${PROJECT_NAME} PRIVATE /usr/include/mysql)
+        target_link_libraries(${PROJECT_NAME} PRIVATE mysqlclient)
+    endif()
 endif()
 
 ###############################################################################

@@ -31,6 +31,13 @@ runs:
         cd cppcheck
         sudo cmake --install build
 
+    # Install minimal dependencies needed for CMake configuration
+    - name: Install minimal dependencies for cppcheck
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev pkg-config libmysqlclient-dev
+
     # The flag CMAKE_EXPORT_COMPILE_COMMANDS generates compile_commands.json
     # which is used by cppcheck and clang-tidy
     - name: Configure CMake

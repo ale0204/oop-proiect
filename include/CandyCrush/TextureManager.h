@@ -37,11 +37,11 @@ public:
 private:
     SDL_Texture* CreateTextureFromImage(SDL_Renderer *renderer, const char *path);
     void LoadGameObjects(SDL_Renderer *renderer);
-    void LoadCandies(SDL_Texture *board, std::vector<Candy*>& candies);
+    void LoadCandies(SDL_Texture *board, std::vector<Candy*>& candyVector);
     // TODO altadata
-    void LoadVerticalStripedCandies(SDL_Texture *board, std::vector<Candy*>& verticalStripedCandies);
-    void LoadHorizontalStripedCandies(SDL_Texture *board, std::vector<Candy*>& horizontalStripedCandies);
-    void LoadBombCandies(SDL_Texture *board, std::vector<Candy*>& bombCandies);
+    void LoadVerticalStripedCandies(SDL_Texture *board, std::vector<Candy*>& stripedCandyVector);
+    void LoadHorizontalStripedCandies(SDL_Texture *board, std::vector<Candy*>& stripedCandyVector);
+    void LoadBombCandies(SDL_Texture *board, std::vector<Candy*>& bombCandyVector);
     GameObject* LoadBackground(const char *path);
     Candy* LoadWildCandy(SDL_Texture *board);
 };

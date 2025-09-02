@@ -22,7 +22,7 @@ runs:
       shell: bash
       run: |
         sudo apt-get update
-        sudo apt-get install --no-install-recommends clang-tidy-18 libc++-18-dev libc++abi-18-dev ninja-build
+        sudo apt-get install --no-install-recommends clang-tidy-18 libc++-18-dev libc++abi-18-dev ninja-build libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev pkg-config libmysqlclient-dev
 
     - name: Configure CMake
       uses: ./.github/actions/configure-cmake

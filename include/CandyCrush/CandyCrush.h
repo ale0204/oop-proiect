@@ -21,7 +21,7 @@ private:
 private:
     void RenderBackground() const noexcept;
     void RenderBoard() const;
-    void SwapCandies(Candy *candy1, Candy *candy2);
+    void SwapCandies(Candy *firstCandy, Candy *secondCandy);
     bool SwapCandiesContinuously(void);
     bool SwapCandiesState(void);
     void DeleteCandiesState(void);

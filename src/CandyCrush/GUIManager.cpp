@@ -9,12 +9,12 @@ GUIManager& GUIManager::GetInstance()
     return *instance;
 }
 
-void GUIManager::SetWindow(SDL_Window *window) { 
-    this->window = window;
+void GUIManager::SetWindow(SDL_Window *newWindow) { 
+    this->window = newWindow;
 }
 
-void GUIManager::SetRenderer(SDL_Renderer *renderer) { 
-    this->renderer = renderer;
+void GUIManager::SetRenderer(SDL_Renderer *newRenderer) { 
+    this->renderer = newRenderer;
 }
 
 SDL_Window* GUIManager::GetWindow(void) const { 

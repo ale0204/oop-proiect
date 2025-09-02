@@ -11,8 +11,8 @@ private:
     static GUIManager *instance;
 public:
     static GUIManager& GetInstance();
-    void SetWindow(SDL_Window *window);
-    void SetRenderer(SDL_Renderer *renderer);
+    void SetWindow(SDL_Window *newWindow);
+    void SetRenderer(SDL_Renderer *newRenderer);
     SDL_Window* GetWindow(void) const;
     SDL_Renderer* GetRenderer(void) const;
 };

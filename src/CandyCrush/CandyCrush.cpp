@@ -8,6 +8,8 @@ CandyCrush::CandyCrush(const std::string &windowTitle, int x, int y, int w, int 
 {   
     gameState = GameState::DEFAULT;
     mouseDown = false;
+    mouseX = 0;
+    mouseY = 0;
     candy1 = nullptr;
     candy2 = nullptr;
     animationTime = 200; // ms
@@ -265,13 +267,13 @@ void CandyCrush::RenderBoard() const
                 candy->Draw();
 }
 
-void CandyCrush::SwapCandies(Candy *candy1, Candy *candy2)
+void CandyCrush::SwapCandies(Candy *firstCandy, Candy *secondCandy)
 {
-    SDL_Point pos1 = candy1->GetPosition();
-    SDL_Point pos2 = candy2->GetPosition();
-    candies[pos1.x][pos1.y] = candy2;
-    candies[pos2.x][pos2.y] = candy1;
-    Candy::SwapCandies(candy1, candy2);
+    SDL_Point pos1 = firstCandy->GetPosition();
+    SDL_Point pos2 = secondCandy->GetPosition();
+    candies[pos1.x][pos1.y] = secondCandy;
+    candies[pos2.x][pos2.y] = firstCandy;
+    Candy::SwapCandies(firstCandy, secondCandy);
 }
 
 bool CandyCrush::SwapCandiesContinuously(void)

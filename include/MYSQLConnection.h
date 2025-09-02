@@ -8,7 +8,7 @@ private:
     std::string user;
     std::string password;
     std::string dbName;
-    unsigned short port;
+    [[maybe_unused]] unsigned short port;
     MYSQL *conn;
     static MySQLConnection *instance;
 private:

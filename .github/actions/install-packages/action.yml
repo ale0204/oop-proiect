@@ -10,16 +10,9 @@ runs:
       if: runner.os == 'Linux'
       run: |
         sudo apt-get update
-        sudo apt-get install ninja-build libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev pkg-config
+        sudo apt-get install -y ninja-build libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev pkg-config libmysqlclient-dev libssl-dev
         # https://github.com/llvm/llvm-project/issues/78354
         sudo sysctl vm.mmap_rnd_bits=28
-
-    - name: Install Linux dependencies
-      shell: bash
-      if: runner.os == 'Linux'
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libmysqlclient-dev libssl-dev
       
     # Verify SDL2, MySQL, and OpenSSL installation
     - name: Verify SDL2 installation
@@ -55,20 +48,20 @@ runs:
           exit 1
         fi
 
-    - name: Set up SDL2 path
-      if: runner.os == 'Linux'
-      shell: bash
-      run: |
-        export SDL2_DIR=/usr/include/SDL2
     
-    - name: Install MacOS dependencies and set up SDL2 path
+    # macOS Dependencies
+    - name: Install macOS Dependencies
       shell: bash
       if: runner.os == 'macOS'
       run: |
-        brew install sdl2 sdl2_image sdl2_ttf mysql openssl
-        export SDL2_DIR=/opt/homebrew/lib/cmake/SDL2  # Adjust based on your installation
-        export SDL2_image_DIR=/opt/homebrew/lib/cmake/SDL2_image
-        export SDL2_ttf_DIR=/opt/homebrew/lib/cmake/SDL2_ttf
+        brew install sdl2 sdl2_image sdl2_ttf mysql-client pkg-config
+        # Set environment variables for CMake to find the libraries
+        echo "PKG_CONFIG_PATH=$(brew --prefix)/lib/pkgconfig:$PKG_CONFIG_PATH" >> $GITHUB_ENV
+        echo "CMAKE_PREFIX_PATH=$(brew --prefix)" >> $GITHUB_ENV
+        # Specifically set SDL2 paths
+        echo "SDL2_DIR=$(brew --prefix sdl2)/lib/cmake/SDL2" >> $GITHUB_ENV
+        echo "SDL2_image_DIR=$(brew --prefix sdl2_image)/lib/cmake/SDL2_image" >> $GITHUB_ENV  
+        echo "SDL2_ttf_DIR=$(brew --prefix sdl2_ttf)/lib/cmake/SDL2_ttf" >> $GITHUB_ENV
 
 
     # Also see https://github.com/actions/runner-images/discussions/9446#discussioncomment-8668538
@@ -93,10 +86,3 @@ runs:
       run: |
         # sudo apt-get update
         sudo apt-get install --no-install-recommends valgrind
-        
-    # macOS Dependencies
-    - name: Install macOS Dependencies
-      shell: bash
-      if: runner.os == 'macOS'
-      run: |
-        brew install sdl2 sdl2_image sdl2_ttf pkg-config
