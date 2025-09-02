@@ -10,25 +10,25 @@ runs:
       if: runner.os == 'Linux'
       run: |
         sudo apt-get update
-        sudo apt-get install ninja-build
+        sudo apt-get install ninja-build libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev pkg-config
         # https://github.com/llvm/llvm-project/issues/78354
         sudo sysctl vm.mmap_rnd_bits=28
 
     # Also see https://github.com/actions/runner-images/discussions/9446#discussioncomment-8668538
-    - name: Install Clang ${{ matrix.clang_ver }}
+    - name: Install Clang 18
       shell: bash
       if: runner.os == 'Linux' && matrix.runs_msan == true
       run: |
         wget https://apt.llvm.org/llvm.sh
         chmod +x ./llvm.sh
-        sudo ./llvm.sh ${{ matrix.clang_ver }}
+        sudo ./llvm.sh 18
 
-    - name: Install libc++ (Linux Clang ${{ matrix.clang_ver }})
+    - name: Install libc++ (Linux Clang 18)
       shell: bash
       if: runner.os == 'Linux' && matrix.runs_msan == true
       run: |
         # sudo apt-get update
-        sudo apt-get install --no-install-recommends libc++-${{ matrix.clang_ver }}-dev libc++abi-${{ matrix.clang_ver }}-dev
+        sudo apt-get install --no-install-recommends libc++-18-dev libc++abi-18-dev
 
     - name: Install valgrind
       shell: bash
@@ -36,3 +36,10 @@ runs:
       run: |
         # sudo apt-get update
         sudo apt-get install --no-install-recommends valgrind
+        
+    # macOS Dependencies
+    - name: Install macOS Dependencies
+      shell: bash
+      if: runner.os == 'macOS'
+      run: |
+        brew install sdl2 sdl2_image sdl2_ttf pkg-config

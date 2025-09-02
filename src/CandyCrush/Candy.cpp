@@ -2,7 +2,7 @@
 #include "../../include/CandyCrush/Constants.h"
 
 Candy::Candy(SDL_Texture *texture, const SDL_Rect &srcRect, const SDL_Rect &dstRect, CandyColor color, CandyType type)
-    : GameObject(texture, srcRect, dstRect), color {color}, type {type}
+    : GameObject(texture, srcRect, dstRect), color {color}, type {type}, posX{0}, posY{0}
 {}
 
 void Candy::Draw() const
@@ -37,6 +37,9 @@ void Candy::SetPosition(int x, int y)
 
 void Candy::SwapCandies(Candy *candy1, Candy *candy2)
 {
+    if (candy1 == nullptr || candy2 == nullptr) {
+        return; // Guard against null pointers
+    }
     // std::swap(candy1->srcRect, candy2->srcRect);
     std::swap(candy1->dstRect, candy2->dstRect);
     // std::swap(candy1->color, candy2->color);

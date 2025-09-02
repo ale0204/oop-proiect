@@ -22,7 +22,7 @@ runs:
       shell: bash
       run: |
         sudo apt-get update
-        sudo apt-get install --no-install-recommends clang-tidy-${{ env.CLANG_VER }} libc++-${{ env.CLANG_VER }}-dev libc++abi-${{ env.CLANG_VER }}-dev ninja-build
+        sudo apt-get install --no-install-recommends clang-tidy-18 libc++-18-dev libc++abi-18-dev ninja-build
 
     - name: Configure CMake
       uses: ./.github/actions/configure-cmake
@@ -40,4 +40,4 @@ runs:
         cat "${BUILD_DIR}"/compile_commands.json |
           jq -r '.[] | .file' |                    # select source file paths from CMake project; -r to strip quotes
           grep -v "/${BUILD_DIR}/_deps/" |         # ignore external dependencies
-          xargs clang-tidy-${{ env.CLANG_VER }} -p "${BUILD_DIR}"
+          xargs clang-tidy-18 -p "${BUILD_DIR}"

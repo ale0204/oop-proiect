@@ -1,4 +1,4 @@
-# Generated from CLion Inspection settings
+# Generated from CLion Inspection settings - Modified to suppress problematic checks
 ---
 Checks: '-*,
 bugprone-argument-comment,

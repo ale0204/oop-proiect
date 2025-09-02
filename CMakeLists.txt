@@ -59,12 +59,12 @@ if (WIN32)
     set(SDL2_LIB_DIR "${MY_LIBRARIES_DIR}/SDL2/lib")
     set(SDL2_IMAGE_LIB_DIR "${MY_LIBRARIES_DIR}/SDL2_Image/lib")
     set(SDL2_TTF_LIB_DIR "${MY_LIBRARIES_DIR}/SDL2_ttf/lib")
-    # MySQL setup
-    set(MySQL_INCLUDE_DIR "{MY_LIBRARIES_DIR}/MySQL/include")
-    set(MySQL_LIB_DIR "{MY_LIBRARIES_DIR}/MySQL/lib")
+    # MySQL setup (Windows specific paths)
+    set(MySQL_INCLUDE_DIR "${MY_LIBRARIES_DIR}/MySQL/include")
+    set(MySQL_LIB_DIR "${MY_LIBRARIES_DIR}/MySQL/lib")
     # Include SDL2 headers and link libraries using explicit paths
     target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIR} ${MySQL_INCLUDE_DIR})
-    target_link_directories(${PROJECT_NAME} PRIVATE ${SDL2_LIB_DIR} ${MySQL_LIB_DIR}, ${SDL2_IMAGE_LIB_DIR}
+    target_link_directories(${PROJECT_NAME} PRIVATE ${SDL2_LIB_DIR} ${MySQL_LIB_DIR} ${SDL2_IMAGE_LIB_DIR}
         ${SDL2_TTF_LIB_DIR})
     target_link_libraries(${PROJECT_NAME} PRIVATE "${SDL2_LIB_DIR}/libSDL2.a" "${SDL2_LIB_DIR}/libSDL2main.a" 
         "${SDL2_IMAGE_LIB_DIR}/libSDL2_image.a" "${SDL2_TTF_LIB_DIR}/libSDL2_ttf.a"
@@ -72,7 +72,7 @@ if (WIN32)
     # List the DLLs to copy
     set(DLL_FILES
     "${MY_LIBRARIES_DIR}/SDL2/bin/SDL2.dll"
-    "${MY_LIBRARIES_DIR}/SDL2_Image/bin/SDL2_Image.dll"
+    "${MY_LIBRARIES_DIR}/SDL2_image/bin/SDL2_image.dll"
     "${MY_LIBRARIES_DIR}/SDL2_ttf/bin/SDL2_ttf.dll"
     "${MY_LIBRARIES_DIR}/MySQL/lib/libmysql.dll"
     "${MY_LIBRARIES_DIR}/MySQL/lib/libssl-3-x64.dll"
@@ -90,8 +90,14 @@ if (WIN32)
     endforeach()
 else()
     # Find SDL2 automatically on Linux/macOS
-    find_package(SDL2 REQUIRED)
-    target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2)
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(SDL2 REQUIRED sdl2)
+    pkg_check_modules(SDL2_IMAGE REQUIRED SDL2_image)
+    pkg_check_modules(SDL2_TTF REQUIRED SDL2_ttf)
+    
+    target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS} ${SDL2_TTF_INCLUDE_DIRS})
+    target_link_libraries(${PROJECT_NAME} PRIVATE ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${SDL2_TTF_LIBRARIES})
+    target_compile_options(${PROJECT_NAME} PRIVATE ${SDL2_CFLAGS_OTHER} ${SDL2_IMAGE_CFLAGS_OTHER} ${SDL2_TTF_CFLAGS_OTHER})
 endif()
 
 ###############################################################################

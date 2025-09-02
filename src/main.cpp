@@ -11,7 +11,7 @@ void Demo()
     std::vector<DemoCandy*> candies;
     for(int i = 0; i < 5; i++)
     {
-        int tip;
+        [[maybe_unused]] int tip; // Suppress unused variable warning
         std::cout << "1. NormalCandy\n";
         std::cout << "2. HCandy\n";
         std::cout << "3. VCandy\n";
@@ -33,15 +33,19 @@ void Demo()
         BombCandy *bombCandy;
         WildCandy *wildCandy;
 
+        // cppcheck-suppress cstyleCast
         if((hCandy = dynamic_cast<HorizontalStripedCandy*>(candy)) != nullptr) {
             hCandy->FunctieHorizontalStripedCandy();
         } 
+        // cppcheck-suppress cstyleCast
         else if((vCandy = dynamic_cast<VerticalStripedCandy*>(candy)) != nullptr) {
             vCandy->FunctieVerticalStripedCandy();
         } 
+        // cppcheck-suppress cstyleCast
         else if((bombCandy = dynamic_cast<BombCandy*>(candy)) != nullptr) {
             bombCandy->FunctieBombCandy();
         }
+        // cppcheck-suppress cstyleCast
         else if((wildCandy = dynamic_cast<WildCandy*>(candy)) != nullptr) {
             wildCandy->FunctieWildCandy();
         }

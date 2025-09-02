@@ -159,6 +159,7 @@ jobs:
           mkdir -p artifacts/${{ env.BIN_DIR }}
           cp ./libraries/SDL2/bin/SDL2.dll artifacts/${{ env.BIN_DIR }}
           cp ./libraries/SDL2_image/bin/SDL2_image.dll artifacts/${{ env.BIN_DIR }}
+          cp ./libraries/SDL2_ttf/bin/SDL2_ttf.dll artifacts/${{ env.BIN_DIR }}
           cp ./libraries/MySQL/lib/libmysql.dll artifacts/${{ env.BIN_DIR }}
           cp ./libraries/MySQL/lib/libssl-3-x64.dll artifacts/${{ env.BIN_DIR }}
           cp ./libraries/MySQL/lib/libcrypto-3-x64.dll artifacts/${{ env.BIN_DIR }}
