@@ -18,7 +18,7 @@ CandyCrush::CandyCrush(const std::string &windowTitle, int x, int y, int w, int 
         for(size_t j = 0; j < candies[i].size(); j++)
             candies[i][j] = nullptr;
     
-    SDL_Point dstXY;
+    SDL_Point dstXY = {0, 0};  // Initialize completely to avoid MSan issues
     dstXY.x = initX; dstXY.y = initY;
     for(int i = 0; i < BOARD_SIZE_X; i++)
     {
