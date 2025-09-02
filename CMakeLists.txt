@@ -227,7 +227,7 @@ if(APPLE)
     install(FILES launcher.command DESTINATION ${DESTINATION_DIR})
 endif()
 
-copy_files(FILES tastatura.txt)
+# copy_files(FILES tastatura.txt)  # Removed - not used by the application
 copy_files(DIRECTORY assets)
 # copy_files(FILES tastatura.txt config.json DIRECTORY images sounds)
 # copy_files(DIRECTORY images sounds)
