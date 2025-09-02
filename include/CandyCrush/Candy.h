@@ -14,17 +14,25 @@ private:
     CandyType type;
     int posX;
     int posY;
+    bool shouldDelete;
+    bool isMoving;
 public:
     Candy(SDL_Texture *texture, const SDL_Rect& srcRect, const SDL_Rect& dstRect, CandyColor color, CandyType type);
     void Draw() const override;
-    virtual GameObject* Clone() override;
+    virtual Candy* Clone() override;
     CandyColor GetColor(void) const;
     CandyType GetType(void) const;
     SDL_Point GetPosition(void) const;
     void SetPosition(int x, int y);
+    void MarkForDeletion(void);
+    void MoveY(int dy);
+    bool ShouldDelete(void) const;
+    bool IsMoving(void) const;
+    void SetMoving(bool moving);
     static void SwapCandies(Candy *candy1, Candy *candy2);
     static SDL_Point* GetPosition(int mouseX, int mouseY);
     static CandyColor RandomColor(void);
+    static Candy* GenerateRandomCandy(void);
     ~Candy() override = default;
 };
 

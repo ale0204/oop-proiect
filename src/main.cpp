@@ -9,7 +9,8 @@
 void Demo()
 {
     std::vector<DemoCandy*> candies;
-    for(int i = 0; i < 5; i++)
+    int numCandies = static_cast<int>(CandyType::NUM_CANDIES);
+    for(int i = 0; i < numCandies; i++)
     {
         [[maybe_unused]] int tip; // Suppress unused variable warning
         std::cout << "1. NormalCandy\n";
@@ -18,8 +19,8 @@ void Demo()
         std::cout << "4. BombCandy\n";
         std::cout << "5. WildCandy\n";
         std::cout << "Introduceti tipul: ";
-        tip = 1 + rand() % (((int) CandyType::NUM_CANDIES) - 1);
-        if(tip < 0 || tip >= (int) CandyType::NUM_CANDIES)
+        tip = 1 + rand() % (numCandies - 1);
+        if(tip < 0 || tip >= numCandies)
         {
             std::cout << "Tip invalid\n";
             continue;
@@ -54,8 +55,8 @@ void Demo()
         delete candy;
 }
 
-int main() 
-{   
+// int main() 
+// {   
     // TestTable& testTable = TestTable::GetInstance();
     // std::vector<TestTableEntry> entries = testTable.Select();
 
@@ -79,6 +80,8 @@ int main()
     //         std::cout << entry << std::endl;
     //     }
     // );
+int main() 
+{   
     Demo();
     try {
         std::unique_ptr<CandyCrush> candyCrush = std::make_unique<CandyCrush>();

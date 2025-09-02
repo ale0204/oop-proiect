@@ -11,18 +11,19 @@
 Game::Game(const std::string& windowTitle, int x, int y, int w, int h, int fps)
     : running {true}, fps {fps}, frameTime{1000/static_cast<Uint64>(fps)}
 {
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        throw SDLInitException(std::string("SDL could not initialize! SDL_Error: ") + SDL_GetError() + '\n', 100);
+    window = NULL;
+    renderer = NULL;
+    if (SDL_Init(SDL_INIT_VIDEO) == -1) {
+        std::string exception_message = std::string("SDL could not initialize! SDL_Error: ") + SDL_GetError() + '\n';
+        throw SDLInitException(exception_message, 100);
     }
     if (TTF_Init() == -1) {
-        throw TTFInitException(std::string("TTF_Init failed: ") + TTF_GetError() + '\n', 200);
-        SDL_Quit();
-        exit(EXIT_FAILURE);
+        std::string exception_message = std::string("TTF_Init failed: ") + TTF_GetError() + '\n';
+        throw TTFInitException(exception_message, 200);
     }
-    if (IMG_Init(IMG_INIT_PNG) == 0) {
-        throw IMGInitException(std::string("IMG_Init failed: ") + IMG_GetError() + '\n', 300);
-        TTF_Quit(); SDL_Quit();
-        exit(EXIT_FAILURE);
+    if (IMG_Init(IMG_INIT_PNG) == -1) {
+        std::string exception_message = std::string("IMG_Init failed: ") + IMG_GetError() + '\n';
+        throw IMGInitException(exception_message, 300);
     }
 
     window = SDL_CreateWindow(windowTitle.c_str(), x, y, w, h, 0);

@@ -17,10 +17,10 @@ TestTableEntry& TestTableEntry::operator=(const TestTableEntry& other)
 
 void TestTableEntry::Print(std::ostream& os) const
 {
-    const std::vector<std::string>& column_names =  TestTable::GetInstance().GetColumnNames();
-    os << column_names[0] << ": " << id << '\n';
-    os << column_names[1] << ": " << name << '\n';
-    os << column_names[2] << ": " << age << '\n';
+    const std::vector<std::string>& columnNames =  TestTable::GetInstance().GetColumnNames();
+    os << columnNames[0] << ": " << id << '\n';
+    os << columnNames[1] << ": " << name << '\n';
+    os << columnNames[2] << ": " << age << '\n';
 }
 
 std::istream& operator>>(std::istream& is, TestTableEntry& entry)

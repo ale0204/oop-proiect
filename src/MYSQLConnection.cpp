@@ -3,8 +3,8 @@
 MySQLConnection* MySQLConnection::instance = nullptr;
 
 MySQLConnection::MySQLConnection(std::string host, std::string user,
-                    std::string password, std::string db_name, unsigned short port)
-    : host {host}, user {user}, password {password}, db_name {db_name}, port {port}
+                    std::string password, std::string dbName, unsigned short port)
+    : host {host}, user {user}, password {password}, dbName {dbName}, port {port}
 {
     conn = mysql_init(NULL);
     if (conn == NULL)
@@ -12,7 +12,7 @@ MySQLConnection::MySQLConnection(std::string host, std::string user,
         fprintf(stderr, "mysql_init() failed\n");
         exit(EXIT_FAILURE);
     }
-    if(mysql_real_connect(conn, host.c_str(), user.c_str(), password.c_str(), db_name.c_str(), port, NULL, 0) == NULL)
+    if(mysql_real_connect(conn, host.c_str(), user.c_str(), password.c_str(), dbName.c_str(), port, NULL, 0) == NULL)
     {
         fprintf(stderr, "mysql_real_connect() failed\n");
         mysql_close(conn);
@@ -28,7 +28,7 @@ MySQLConnection::MySQLConnection(std::string host, std::string user,
 }
 
 MYSQL* MySQLConnection::GetConnection()  { return conn; }
-std::string MySQLConnection::GetDbName() { return db_name; }
+std::string MySQLConnection::GetDbName() { return dbName; }
 
 MySQLConnection::~MySQLConnection() 
 {

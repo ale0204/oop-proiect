@@ -6,26 +6,26 @@ std::vector<std::string> AbstractTable::FetchColumnNames(int& numFields)
     MYSQL_RES *result;
     std::vector<std::string> cols;
     std::string query = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '" 
-                        + MySQLConnection::GetInstance().GetDbName() + "' AND TABLE_NAME = '" + table_name + "' "
+                        + MySQLConnection::GetInstance().GetDbName() + "' AND TABLE_NAME = '" + tableName + "' "
                         + "ORDER BY ORDINAL_POSITION;";
     result = ExecuteSelectQuery(query);
     if(result == NULL)
         return cols;
-    num_columns = 0;
+    numColumns = 0;
     while ((row = mysql_fetch_row(result))) {
         cols.push_back(row[0]);
-        num_columns++;
+        numColumns++;
     }
-    printf("num_columns = %d\n", num_columns);
-    numFields = num_columns;
+    printf("num_columns = %d\n", numColumns);
+    numFields = numColumns;
     mysql_free_result(result);
     return cols;
 }
 
-AbstractTable::AbstractTable(std::string table_name) : res {NULL}, row {NULL}, table_name {table_name} 
+AbstractTable::AbstractTable(std::string tableName) : res {NULL}, row {NULL}, tableName {tableName} 
 {
     conn = MySQLConnection::GetInstance().GetConnection();
-    column_names = FetchColumnNames(num_columns);
+    columnNames = FetchColumnNames(numColumns);
 }
 
 std::string AbstractTable::StringToDb(std::string s)
@@ -36,11 +36,11 @@ std::string AbstractTable::StringToDb(std::string s)
 std::string AbstractTable::InsertQuery()
 {
     std::string query;
-    query = "INSERT INTO " + table_name + "(";
-    for(int i = 1; i < num_columns; i++)
+    query = "INSERT INTO " + tableName + "(";
+    for(int i = 1; i < numColumns; i++)
     {
-        query += column_names[i];
-        if(i != num_columns-1)
+        query += columnNames[i];
+        if(i != numColumns-1)
         {
             query += ", ";
         }
@@ -74,5 +74,5 @@ bool AbstractTable::ExecuteQuery(std::string query)
 
 const std::vector<std::string>& AbstractTable::GetColumnNames() const
 {
-    return column_names;
+    return columnNames;
 }

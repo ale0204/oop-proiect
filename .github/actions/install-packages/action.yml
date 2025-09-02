@@ -14,6 +14,63 @@ runs:
         # https://github.com/llvm/llvm-project/issues/78354
         sudo sysctl vm.mmap_rnd_bits=28
 
+    - name: Install Linux dependencies
+      shell: bash
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libmysqlclient-dev libssl-dev
+      
+    # Verify SDL2, MySQL, and OpenSSL installation
+    - name: Verify SDL2 installation
+      shell: bash
+      if: runner.os == 'Linux'
+      run: |
+        if pkg-config --exists sdl2; then
+          echo "SDL2 is installed"
+        else
+          echo "SDL2 is NOT installed"
+          exit 1
+        fi
+
+    - name: Verify MySQL installation
+      shell: bash
+      if: runner.os == 'Linux'
+      run: |
+        if dpkg-query -l | grep -q libmysqlclient-dev; then
+          echo "MySQL client is installed"
+        else
+          echo "MySQL client is NOT installed"
+          exit 1
+        fi
+
+    - name: Verify OpenSSL installation
+      shell: bash
+      if: runner.os == 'Linux'
+      run: |
+        if dpkg-query -l | grep -q libssl-dev; then
+          echo "OpenSSL is installed"
+        else
+          echo "OpenSSL is NOT installed"
+          exit 1
+        fi
+
+    - name: Set up SDL2 path
+      if: runner.os == 'Linux'
+      shell: bash
+      run: |
+        export SDL2_DIR=/usr/include/SDL2
+    
+    - name: Install MacOS dependencies and set up SDL2 path
+      shell: bash
+      if: runner.os == 'macOS'
+      run: |
+        brew install sdl2 sdl2_image sdl2_ttf mysql openssl
+        export SDL2_DIR=/opt/homebrew/lib/cmake/SDL2  # Adjust based on your installation
+        export SDL2_image_DIR=/opt/homebrew/lib/cmake/SDL2_image
+        export SDL2_ttf_DIR=/opt/homebrew/lib/cmake/SDL2_ttf
+
+
     # Also see https://github.com/actions/runner-images/discussions/9446#discussioncomment-8668538
     - name: Install Clang 18
       shell: bash
