@@ -55,7 +55,6 @@ runs:
       shell: bash
       # run one sanitizer for each OS to avoid building extra binaries
       if: matrix.cxx == 'cl' && matrix.runs_asan == true
-      continue-on-error: true
       run: |
         ./${{ env.ZIP_NAME }}/"${EXECUTABLE_NAME}".exe
 
